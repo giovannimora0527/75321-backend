@@ -10,5 +10,5 @@ import lombok.Data;
 public class RespuestaRs {    
     private String mensaje;
     private boolean estaFuncionando;
-    private Integer status;
+    private Integer status;    
 }
