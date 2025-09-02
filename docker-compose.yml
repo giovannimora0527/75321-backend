@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  db:
+    container_name: clinica_75_mysql
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password1
+      MYSQL_DATABASE: clinica_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password1
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
+
+
