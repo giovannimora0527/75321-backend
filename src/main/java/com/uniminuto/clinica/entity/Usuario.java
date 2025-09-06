@@ -27,13 +27,13 @@ public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "username")
     private String username;
 
-    @Column(name = "password_hash")
-    private String password;
+    @Column(name = "password_hash", columnDefinition = "TEXT", nullable = false)
+    private String passwordHash;
 
     @Column(name = "rol")
     private String rol;
