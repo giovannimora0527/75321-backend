@@ -18,6 +18,7 @@ public interface MedicoApi {
     @GetMapping(value = "/por-especializacion", produces = "application/json")
     List<Medico> obtenerMedicosPorEspecializacion(@RequestParam("codigo") String codigoEspecializacion);
 
-    //EJEMPLO https://localhost:8000/clinica/medico/listar
+    //EJEMPLO http://localhost:8000/clinica/v1/medico/por-especializacion?codigo=COD_01
+    //Ejemplo http://localhost:8000/clinica/v1/medico/listar
 
 }

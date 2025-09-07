@@ -12,3 +12,11 @@ public class RespuestaRs {
     private boolean estaFuncionando;
     private Integer status;
 }
+
+//Hay QUE CREAR UN MODELO PARA EL SGUNDO Punto
+
+//para madnar un request y hay que probralo en Postamn en body
+
+//guardar en la logica validar los datos que sean validos
+
+//validar y reutilizar codigo
