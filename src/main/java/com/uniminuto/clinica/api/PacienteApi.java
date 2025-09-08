@@ -1,6 +1,11 @@
-package com.uniminuto.clinica.api;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
 
-import com.uniminuto.clinica.entity.Medico;
+
+package com.uniminuto.clinica.api;
+import com.uniminuto.clinica.entity.Paciente;
 import java.util.List;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
@@ -8,27 +13,25 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
 /**
  *
- * @author lmora
+ * @author jorge
  */
 @CrossOrigin(origins = "*")
-@RequestMapping("/medico")
-public interface MedicoApi {
+@RequestMapping("/paciente")
+public interface PacienteApi {
 
     @RequestMapping(value = "/listar",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<List<Medico>> listarMedicos();
-
-    @RequestMapping(value = "/buscar-por-especialidad",
+    ResponseEntity<List<Paciente>> listarPacientes();
+    
+    @RequestMapping(value = "/buscar-por-documento",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<List<Medico>> listarPorEspecialidad(
-            @RequestParam String codigoEspecializacion
+    ResponseEntity<Paciente> listarPorDocumento(
+            @RequestParam String numero_documento
     ) throws BadRequestException;
-
 }

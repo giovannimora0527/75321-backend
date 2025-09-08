@@ -1,4 +1,4 @@
-package com.uniminuto.clinica.model;
+    package com.uniminuto.clinica.model;
 
 import lombok.Data;
 
