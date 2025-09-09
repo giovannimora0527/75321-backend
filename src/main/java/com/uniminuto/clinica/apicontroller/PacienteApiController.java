@@ -23,4 +23,11 @@ public class PacienteApiController implements PacienteApi {
     public List<Paciente> obtenerTodos() {
         return pacienteService.obtenerTodos();
     }
+
+    @Override
+    public List<Paciente> listarPorFechaNacimientoAsc() {
+        return pacienteService.listarPorFechaNacimientoAsc();
+    }
+
+
 }

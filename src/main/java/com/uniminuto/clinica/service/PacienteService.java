@@ -9,4 +9,7 @@ public interface PacienteService {
 
     //Hay que implentarlo
     List<Paciente> obtenerTodos(); //Definimos Obtener todos
+
+    //Nuevo metodo organizar Fecha_Nacimiento
+    List<Paciente>listarPorFechaNacimientoAsc();
 }

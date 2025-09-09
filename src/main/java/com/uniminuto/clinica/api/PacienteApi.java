@@ -15,4 +15,8 @@ public interface PacienteApi {
 
     //https://localhost:8000/clinica/pacientes/listar
 
+    //Declaramos el sub path y pasamos impl
+    // https://localhost:8000/clinica/pacientes/listar-por-fecha-nacimiento
+    @GetMapping("/listar-por-fecha-nacimiento")
+    List<Paciente>listarPorFechaNacimientoAsc();
 }

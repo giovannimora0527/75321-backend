@@ -19,4 +19,14 @@ public class PacienteServiceImpl implements PacienteService {
 
         return pacienteRepository.findAll();
     }
+    //Implentamos la firma necesario un return llamando repositorio+firma de la interfaz
+    @Override
+    public List<Paciente> listarPorFechaNacimientoAsc() {
+        return pacienteRepository.findAllByOrderByFechaNacimientoAsc();
+    }
+
+
+
+
+
 }

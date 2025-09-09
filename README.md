@@ -181,6 +181,8 @@ ALTER TABLE paciente
 - **usuario**: PRIMARY (id), UNIQUE (username)
 
 ## 🧪 Ejemplo de Uso
+## mysql -uroot -p -h 127.0.0.1 -P 3306
+
 
 ### Buscar usuario por documento de paciente
 ```bash

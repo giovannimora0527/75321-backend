@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,4 +20,7 @@ public interface PacienteRepository extends JpaRepository<Paciente,Long> {
     @EntityGraph(attributePaths = "usuario")
     Optional<Paciente> findByNumeroDocumento(String numeroDocumento);
     //Pasar service interfaz para la firma
+
+    //ordenar por fecha de nacimiento(creamosMetodo)
+    List<Paciente> findAllByOrderByFechaNacimientoAsc();
 }
