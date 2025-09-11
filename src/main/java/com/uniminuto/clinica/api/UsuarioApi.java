@@ -38,4 +38,12 @@ public interface UsuarioApi {
     ResponseEntity<List<Usuario>> encontrarUsuariosPorRol(
             @RequestParam String role
     );
+
+    @RequestMapping(value = "/find-by-document",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<Usuario> encontrarUsuarioPorDocumento(
+            @RequestParam String numeroDocumento
+    ) throws BadRequestException;
 }

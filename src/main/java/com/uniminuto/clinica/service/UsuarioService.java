@@ -15,4 +15,7 @@ public interface UsuarioService {
             throws BadRequestException;
     
     List<Usuario> buscarPorRol(String role);
+    
+    Usuario buscarUsuarioPorDocumento(String numeroDocumento)
+            throws BadRequestException;
 }

@@ -8,4 +8,6 @@ import com.uniminuto.clinica.model.RespuestaRs;
  */
 public interface ClinicaService {
     RespuestaRs test();
+    
+    
 }

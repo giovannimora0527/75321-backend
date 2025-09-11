@@ -1,39 +1,48 @@
 package com.uniminuto.clinica.apicontroller;
 
-import com.uniminuto.clinica.api.UsuarioApi;
 import com.uniminuto.clinica.entity.Usuario;
 import com.uniminuto.clinica.service.UsuarioService;
 import java.util.List;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- *
- * @author lmora
- */
 @RestController
-public class UsuarioApiController implements UsuarioApi {
-    
+@RequestMapping("/users")
+@CrossOrigin(origins = "*")
+public class UsuarioApiController {
+
     @Autowired
     private UsuarioService usuarioService;
-    
-    @Override
+
+    // Listar todos los usuarios
+    @GetMapping("/all")
     public ResponseEntity<List<Usuario>> listarUsuarios() {
-        return ResponseEntity.ok(this.usuarioService.listarTodosLosUsuarios());
+        return ResponseEntity.ok(usuarioService.listarTodosLosUsuarios());
     }
-    
-    @Override
-    public ResponseEntity<Usuario> encontrarUsuarioPorNombre(String username)
+
+    // Buscar usuario por nombre de usuario
+    @GetMapping("/find-username")
+    public ResponseEntity<Usuario> encontrarUsuarioPorNombre(@RequestParam String username)
             throws BadRequestException {
-        return ResponseEntity.ok(this.usuarioService
-                .buscarUsuarioPorNombre(username));
+        return ResponseEntity.ok(usuarioService.buscarUsuarioPorNombre(username));
     }
-    
-    @Override
-    public ResponseEntity<List<Usuario>> encontrarUsuariosPorRol(String role) {
-        return ResponseEntity.ok(this.usuarioService.buscarPorRol(role));
+
+    // Buscar usuarios por rol
+    @GetMapping("/find-by-role")
+    public ResponseEntity<List<Usuario>> encontrarUsuariosPorRol(@RequestParam String role) {
+        return ResponseEntity.ok(usuarioService.buscarPorRol(role));
     }
-    
+
+    // Buscar usuario por número de documento
+    @GetMapping("/find-by-document")
+    public ResponseEntity<Usuario> encontrarUsuarioPorDocumento(@RequestParam String numeroDocumento)
+            throws BadRequestException {
+        return ResponseEntity.ok(usuarioService.buscarUsuarioPorDocumento(numeroDocumento));
+    }
 }

@@ -35,7 +35,7 @@ public class MedicoServiceImpl implements MedicoService {
         Optional<Especializacion> optEsp = this.especializacionRepository
                 .findByCodigoEspecializacion(codigoEspec);
         if (!optEsp.isPresent()) {
-            // lanzar excepcion
+       
             throw new BadRequestException("No existe la especializacion");
         }
 
