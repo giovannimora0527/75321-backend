@@ -18,18 +18,18 @@ public class RespuestaRs {
     private boolean estaFuncionando;
     private int status;
     
-    // Constructor vacío
+   
     public RespuestaRs() {
     }
     
-    // Constructor con parámetros
+   
     public RespuestaRs(String mensaje, boolean estaFuncionando, int status) {
         this.mensaje = mensaje;
         this.estaFuncionando = estaFuncionando;
         this.status = status;
     }
     
-    // Getters
+    
     public String getMensaje() {
         return mensaje;
     }
@@ -46,7 +46,7 @@ public class RespuestaRs {
         return status;
     }
     
-    // Setters
+    
     public void setMensaje(String mensaje) {
         this.mensaje = mensaje;
     }

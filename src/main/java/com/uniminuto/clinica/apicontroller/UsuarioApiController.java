@@ -20,26 +20,26 @@ public class UsuarioApiController {
     @Autowired
     private UsuarioService usuarioService;
 
-    // Listar todos los usuarios
+   
     @GetMapping("/all")
     public ResponseEntity<List<Usuario>> listarUsuarios() {
         return ResponseEntity.ok(usuarioService.listarTodosLosUsuarios());
     }
 
-    // Buscar usuario por nombre de usuario
+    
     @GetMapping("/find-username")
     public ResponseEntity<Usuario> encontrarUsuarioPorNombre(@RequestParam String username)
             throws BadRequestException {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorNombre(username));
     }
 
-    // Buscar usuarios por rol
+  
     @GetMapping("/find-by-role")
     public ResponseEntity<List<Usuario>> encontrarUsuariosPorRol(@RequestParam String role) {
         return ResponseEntity.ok(usuarioService.buscarPorRol(role));
     }
 
-    // Buscar usuario por número de documento
+    
     @GetMapping("/find-by-document")
     public ResponseEntity<Usuario> encontrarUsuarioPorDocumento(@RequestParam String numeroDocumento)
             throws BadRequestException {
