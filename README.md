@@ -182,6 +182,7 @@ ALTER TABLE paciente
 
 ## 🧪 Ejemplo de Uso
 ## mysql -uroot -p -h 127.0.0.1 -P 3306
+## git branch -d rama_eliminar
 
 
 ### Buscar usuario por documento de paciente
