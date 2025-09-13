@@ -7,6 +7,8 @@ import com.uniminuto.clinica.service.CitaService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 public class CitaApiController implements CitaApi {
@@ -14,5 +16,11 @@ public class CitaApiController implements CitaApi {
     @Override
     public CitaRs crear(CrearCitaRq rq) {
         return citaService.crear(rq);
+    }
+
+    //El controlador llama al service
+    @Override
+    public List<CitaRs> listaPorFechaReciente() {
+        return citaService.listaPorFechaReciente();
     }
 }

@@ -16,6 +16,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 //Poner decoradores
 @Service
 @RequiredArgsConstructor
@@ -44,8 +48,9 @@ public class CitaServiceImpl implements CitaService {
 
         c=citaRepository.save(c);
 
+
         //DTO de respuesta
-        return new CitaRs(
+        return new CitaRs (
                 c.getId(),
                 paciente.getId(),
                 paciente.getNumeroDocumento(),
@@ -60,4 +65,35 @@ public class CitaServiceImpl implements CitaService {
         );
 
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CitaRs> listaPorFechaReciente() {
+        //Ir a la base de datos traer entidades cita ordenadas mas nuevas
+        List<Cita> citas=citaRepository.findAllByOrderByFechaHoraDesc();
+
+
+        //Transformar cada cita (entidad) a citaRS a la respuesta
+        return citas.stream().map(this::toDto).collect(Collectors.toList());
+
+    }
+    //mapear flujo interno
+    private CitaRs toDto(Cita c) {
+        Paciente p=c.getPaciente();
+        Medico m=c.getMedico();
+
+        return new CitaRs(
+                c.getId(),
+                p.getId(),
+                p.getNumeroDocumento(),
+                p.getNombres(),
+                m.getId(),
+                m.getNombres(),
+                c.getFechaHora(),
+                c.getEstado(),
+                c.getMotivo()
+        );
+    }
+
+
 }
