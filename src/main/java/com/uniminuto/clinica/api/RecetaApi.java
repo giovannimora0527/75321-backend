@@ -3,12 +3,14 @@ package com.uniminuto.clinica.api;
 import com.uniminuto.clinica.model.CrearRecetaRq;
 import com.uniminuto.clinica.model.RecetaRs;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
-import java.awt.*;
+import java.util.List;
+
 
 @RequestMapping(path = "/recetas",
         consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -17,7 +19,15 @@ public interface RecetaApi {
     //Implemtamos el METODO Sea post,get,delete o put
 
     @PostMapping(path = "/crear",
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+
     RecetaRs crear(@Valid @RequestBody CrearRecetaRq rq);
     //Firmamos el ENDPOINT
+
+    @GetMapping(value = "/recientes")
+    List<RecetaRs> listarRecientes(); //Listamos el Model
+
+
 }

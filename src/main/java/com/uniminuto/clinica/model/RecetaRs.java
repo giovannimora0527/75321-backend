@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,4 +17,6 @@ public class RecetaRs {
     private String medicamentoNombre;
     private String dosis;
     private String indicaciones;
+    //Nuevo atributo
+    private LocalDateTime fechaCreacionRegistro;
 }

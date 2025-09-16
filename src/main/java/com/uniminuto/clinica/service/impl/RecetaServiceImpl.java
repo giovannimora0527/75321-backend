@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class RecetaServiceImpl implements RecetaService {
@@ -53,7 +56,31 @@ public class RecetaServiceImpl implements RecetaService {
                 med.getId(),
                 med.getName(),
                 r.getDosis(),
-                r.getIndicaciones()
+                r.getIndicaciones(),
+                r.getFechaCreacionRegistro()
         );
     }
+
+    @Override
+    @Transactional
+    public List<RecetaRs> listarRecientes() {
+        return recetaRepository.findAllByOrderByFechaCreacionRegistroDesc().stream().map(this::toDto).collect(Collectors.toList());
+
+    }
+    //Hacemos privado este metodo usamos map.collectors y stream
+    private RecetaRs toDto(Receta r){
+        Medicamento m=r.getMedicamento();
+        return new RecetaRs(
+               r.getId(),
+               r.getCita().getId(), //espera un Long
+                m.getId(),
+                m.getName(),
+                r.getDosis(),
+                r.getIndicaciones(),
+                r.getFechaCreacionRegistro()
+
+        );
+
+    }
+
 }

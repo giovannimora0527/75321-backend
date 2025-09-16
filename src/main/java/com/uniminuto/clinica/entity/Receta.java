@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -45,4 +47,9 @@ public class Receta implements Serializable {
 
     @Column(name = "indicaciones",columnDefinition = "text")
     private String indicaciones;
+
+    //Nuevo campo
+    @Column(name="fecha_creacion_registro",nullable = false)
+    @CreationTimestamp
+    private LocalDateTime fechaCreacionRegistro;
 }

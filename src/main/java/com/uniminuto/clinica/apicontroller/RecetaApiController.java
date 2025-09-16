@@ -7,6 +7,9 @@ import com.uniminuto.clinica.service.RecetaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.*;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class RecetaApiController implements RecetaApi {
@@ -16,4 +19,12 @@ public class RecetaApiController implements RecetaApi {
     public RecetaRs crear(CrearRecetaRq rq) {
         return recetaService.crear(rq);
     }
+
+    //Implentamos el Controlador
+    @Override
+    public List<RecetaRs> listarRecientes() {
+        return recetaService.listarRecientes();
+    }
+
+
 }
