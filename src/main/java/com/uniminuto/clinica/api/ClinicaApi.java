@@ -16,7 +16,6 @@ public interface ClinicaApi {
 
     @RequestMapping(value = "/test",
             produces = {"application/json"},
-            consumes = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<RespuestaRs> testService();
 

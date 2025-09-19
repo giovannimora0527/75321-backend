@@ -1,6 +1,5 @@
 package com.uniminuto.clinica.entity;
 
-import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +12,8 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "paciente")
-public class Paciente {
+
+public class Paciente{
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -37,7 +37,7 @@ public class Paciente {
     private String Ape;
     
     @Column (name = "fecha_nacimiento")
-    private String FecNac;
+    private String fecNac;
     
     @Column (name = "genero")
     private String Gen;
