@@ -4,10 +4,14 @@
  */
 package com.uniminuto.clinica.service;
 
+import com.uniminuto.clinica.entity.Medico;
+import java.util.List;
+
 /**
  *
  * @author johnq
  */
-public interface Pacientre {
+public interface MedicoService {
+    List<Medico> listarTodosLosMedicos();
     
 }
