@@ -3,6 +3,8 @@ package com.uniminuto.clinica.entity;
 import javax.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @Table(name = "receta")
@@ -28,4 +30,7 @@ public class Receta {
 
     @Column(name = "indicaciones", columnDefinition = "TEXT")
     private String indicaciones;
+
+    @Column(name = "fecha_creacion_registro")
+    private LocalDateTime fechaCreacion = LocalDateTime.now();
 }

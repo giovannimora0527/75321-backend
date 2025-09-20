@@ -32,6 +32,6 @@ public class RecetaServiceImpl implements RecetaService{
 
     @Override
     public List<Receta> listarRecetas() {
-        return recetaRepository.findAll();
+        return recetaRepository.findAllByOrderByFechaCreacionDesc();
     }
 }
