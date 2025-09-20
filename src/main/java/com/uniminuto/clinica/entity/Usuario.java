@@ -43,10 +43,5 @@ public class Usuario implements Serializable {
 
     @Column(name = "activo")
     private boolean activo;
-
-    public Usuario(String rol) {
-    this.rol = rol;
-    // constructor con parametros this: palabra reservada clase usuario tiene e
-    // el valor que le traiga 
-    }
+    
 }

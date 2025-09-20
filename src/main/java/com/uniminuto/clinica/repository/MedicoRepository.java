@@ -15,6 +15,6 @@ import org.springframework.stereotype.Repository;
 public interface MedicoRepository extends JpaRepository<Medico, Long> {
     
     List<Medico> findByEspecializacion(Especializacion e);
-    
-    Optional<Medico> findByRegistroProfesional(String registro);
+
+    Optional<Medico> findById(Integer medicoId);
 }

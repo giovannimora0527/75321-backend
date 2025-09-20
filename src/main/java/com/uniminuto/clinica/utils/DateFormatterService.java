@@ -1,4 +1,4 @@
-    package com.uniminuto.clinica.utils;
+package com.uniminuto.clinica.utils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,8 +1,6 @@
 package com.uniminuto.clinica.api;
 
-import com.uniminuto.clinica.entity.Medico;
 import com.uniminuto.clinica.entity.Paciente;
-import com.uniminuto.clinica.entity.Usuario;
 import java.util.List;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
@@ -11,18 +9,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@RequestMapping("/pacientes")  // Cambiado para coincidir con el controlador
-public interface PacienteApi {
-    
-    @RequestMapping(value = "/all",  // Cambiado para coincidir con el controlador
-            produces = {"application/json"},
-            method = RequestMethod.GET)  // Removido consumes ya que GET no envía body
-    ResponseEntity<List<Paciente>> listarPaciente();
+@CrossOrigin(origins = "*")
+@RequestMapping("/paciente")
 
-    @RequestMapping(value = "/find-documento",  // Cambiado para coincidir con el controlador
+public interface PacienteApi{
+    
+    @RequestMapping(
+            value = "/all",
             produces = {"application/json"},
-            method = RequestMethod.GET)  // Removido consumes ya que GET no envía body
-    ResponseEntity<Paciente> buscarPorNumeroDocumento(  // Cambiado el tipo de retorno
-            @RequestParam String numeroDocumento
+            method = RequestMethod.GET
+    )
+    ResponseEntity<List<Paciente>> listarPacientes();
+    
+    @RequestMapping(
+            value = "/find-doc",
+            produces = {"application/json"},
+            method = RequestMethod.GET
+    )
+    ResponseEntity<Paciente> encontrarPacientePorDocumento(
+            @RequestParam String numero_documento
     ) throws BadRequestException;
+
+    @RequestMapping(value = "/listarPorFechaDeNacimiento",
+            produces = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<List<Paciente>> listarPacientesPorFecha();
 }

@@ -3,35 +3,27 @@ package com.uniminuto.clinica.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.io.Serializable;
 
+@Data
 @Entity
 @Table(name = "cita")
-@Data
-public class Cita {
+public class Cita implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "paciente_id", nullable = false)
+    @JoinColumn(name = "paciente_id")
     private Paciente paciente;
 
     @ManyToOne
-    @JoinColumn(name = "medico_id", nullable = false)
+    @JoinColumn(name = "medico_id")
     private Medico medico;
 
-    @Column(name = "fecha_hora", nullable = false)
-    private LocalDateTime fechaHora;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private EstadoCita estado = EstadoCita.programada;
-
-    @Column(columnDefinition = "TEXT")
+    private String fechaHora; // string para simplificar manejo de hora
+    private String estado;
     private String motivo;
 
-    public enum EstadoCita {
-        programada, confirmada, atendida, cancelada
-    }
 }

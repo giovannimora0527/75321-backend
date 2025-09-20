@@ -1,35 +1,35 @@
 package com.uniminuto.clinica.apicontroller;
 
+import com.uniminuto.clinica.api.PacienteApi;
 import com.uniminuto.clinica.entity.Paciente;
 import com.uniminuto.clinica.service.PacienteService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import org.apache.coyote.BadRequestException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/pacientes")
-public class PacienteApiController {
+public class PacienteApiController implements PacienteApi{
 
-    @Autowired
-    private PacienteService pacienteService;
+    private final PacienteService pacienteService;
 
-    @GetMapping("/all")
+   public PacienteApiController(PacienteService pacienteService){
+       this.pacienteService = pacienteService;
+   }
+
+   @Override
     public ResponseEntity<List<Paciente>> listarPacientes() {
-        return ResponseEntity.ok(pacienteService.listarTodos());
+        return ResponseEntity.ok(this.pacienteService.listarTodo());
     }
 
-    @GetMapping("/find-documento")
-    public ResponseEntity<Paciente> buscarPorNumeroDocumento(@RequestParam String numeroDocumento) {
-        Paciente paciente = pacienteService.buscarPorNumeroDocumento(numeroDocumento);
-        if (paciente == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(paciente);
+    @Override
+    public ResponseEntity<Paciente> encontrarPacientePorDocumento(String numero_documento)
+            throws BadRequestException {
+        return ResponseEntity.ok(this.pacienteService.buscarPacientePorDocumento(numero_documento));
     }
-     @GetMapping("/por-fecha-nacimiento")
-    public ResponseEntity<List<Paciente>> listarPorFechaNacimiento() {
-        return ResponseEntity.ok(pacienteService.listarPorFechaNacimiento());
+
+    @Override
+    public ResponseEntity<List<Paciente>> listarPacientesPorFecha() {
+        return ResponseEntity.ok(this.pacienteService.PacientesPorFechaDeNacimiento());
     }
 }
