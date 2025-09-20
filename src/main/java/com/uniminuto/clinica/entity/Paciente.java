@@ -43,6 +43,8 @@ private static final long serialVersionUID = 1L;
     @Column(name = "direccion")
     private String direccion;
 
+
+
     // Getters y Setters
     public Integer getId() {
         return id;
@@ -99,5 +101,21 @@ private static final long serialVersionUID = 1L;
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
-   
+
+
+    @Column(name = "fecha_nacimiento")
+    private LocalDateTime fechaNacimiento;
+
+    public LocalDateTime getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(LocalDateTime fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+
+    // ✅ NUEVO CAMPO - Fecha de creación
+    @Column(name = "fecha_creacion_registro")
+    private LocalDateTime fechaCreacionRegistro;
 }

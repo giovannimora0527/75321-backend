@@ -1,9 +1,9 @@
 package com.uniminuto.clinica.service;
 
-/**
- *
- * @author lmora
- */
+import com.uniminuto.clinica.entity.Cita;
+import java.util.List;
+
 public interface CitaService {
-    
+    Cita guardarCita(Cita cita);
+    List<Cita> listarCitasOrdenadas();
 }

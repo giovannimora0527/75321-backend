@@ -1,33 +1,22 @@
 package com.uniminuto.clinica.apicontroller;
-
-import com.uniminuto.clinica.api.PacienteApi;
 import com.uniminuto.clinica.entity.Paciente;
 import com.uniminuto.clinica.service.PacienteService;
 import java.util.List;
-import org.apache.coyote.BadRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- *
- * @author lmora
- */
 @RestController
-public class PacienteApiController implements PacienteApi {
+@RequestMapping("/pacientes")
+public class PacienteApiController {
+    private final PacienteService pacienteService;
 
-    @Autowired
-    private PacienteService pacienteService;
-
-    @Override
-    public ResponseEntity<List<Paciente>> listarPacientes() {
-        return ResponseEntity.ok(this.pacienteService.listarTodo());
+    public PacienteApiController(PacienteService pacienteService) {
+        this.pacienteService = pacienteService;
     }
 
-    @Override
-    public ResponseEntity<Paciente> buscarPorDocumento(String numeroDocumento)
-            throws BadRequestException {
-        return ResponseEntity.ok(this.pacienteService
-                .buscarPacientePorDocumento(numeroDocumento));
+    @GetMapping("/ordenados-por-fecha-nacimiento")
+    public List<Paciente> listarPacientesOrdenadosPorFechaNacimiento() {
+        return pacienteService.listarPacientesPorFechaNacimientoDesc();
     }
 }

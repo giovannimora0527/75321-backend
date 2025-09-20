@@ -12,45 +12,44 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
 
-/**
- *
- * @author lmora
- */
-@Data
 @Entity
-@Table(name = "medico")
-public class Medico implements Serializable {
-    /**
-     * Id serializable.
-     */
-    private static final long serialVersionUID = 1L;
-    
+@Data
+public class Cita implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-    
-    @Column(name = "tipo_documento")
-    private String tipoDocumento;
-    
-    @Column(name = "numero_documento")
-    private String numeroDocumento;
-    
-    @Column(name = "nombres")
-    private String nombres;
-    
-    @Column(name = "apellidos")
-    private String apellidos;
-    
-    @Column(name = "telefono")
-    private String telefono;
-     
-    @Column(name = "registro_profesional")
-    private String registroProfesional; 
-    
+    private Long id;
+
+    private LocalDateTime fechaHora;
+
+    @Column(nullable = false)
+    private String estado = "PENDIENTE"; // valor por defecto
+
+    private String motivo;
+
     @ManyToOne
-    @JoinColumn(name="especializacion_id")
-    private Especializacion especializacion;
+    @JoinColumn(name = "medico_id", nullable = false)
+    private Medico medico;
+
+    @ManyToOne
+    @JoinColumn(name = "paciente_id", nullable = false)
+    private Paciente paciente;
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+
+
+    public void setMedico(Medico medico) {
+        this.medico = medico;
+    }
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public  Medico getMedico() {
+        return medico;
+    }
 
     public Number getId() {
         return id;
@@ -59,11 +58,12 @@ public class Medico implements Serializable {
     @Column(name = "fecha_creacion_registro")
     private LocalDateTime fechaCreacionRegistro;
 
-    public Medico() {
+
+    public Cita() {
         this.fechaCreacionRegistro = LocalDateTime.now();
     }
 
-    // ✅ AGREGA GETTER Y SETTER
+
     public LocalDateTime getFechaCreacionRegistro() {
         return fechaCreacionRegistro;
     }
@@ -71,5 +71,6 @@ public class Medico implements Serializable {
     public void setFechaCreacionRegistro(LocalDateTime fechaCreacionRegistro) {
         this.fechaCreacionRegistro = fechaCreacionRegistro;
     }
+
 
 }

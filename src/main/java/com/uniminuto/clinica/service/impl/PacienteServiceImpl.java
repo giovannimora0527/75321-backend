@@ -13,33 +13,29 @@ import org.springframework.stereotype.Service;
  *
  * @author lmora
  */
+
 @Service
 public class PacienteServiceImpl implements PacienteService {
 
-    @Autowired
-    private PacienteRepository pacienteRepository;
+    private final PacienteRepository pacienteRepository;
 
-    @Override
-    public List<Paciente> listarTodo() {
-        return this.pacienteRepository.findAll();
+    public PacienteServiceImpl(PacienteRepository pacienteRepository) {
+        this.pacienteRepository = pacienteRepository;
     }
 
     @Override
-    public Paciente buscarPacientePorDocumento(String numeroDocumento)
-            throws BadRequestException {
-        
-        if (numeroDocumento == null || numeroDocumento.trim().isEmpty()) {
-            throw new BadRequestException("El número de documento es requerido");
-        }
+    public List<Paciente> listarTodo() {
+        return pacienteRepository.findAll();
+    }
 
-        Optional<Paciente> paciente = this.pacienteRepository
-                .findByNumeroDocumento(numeroDocumento.trim());
+    @Override
+    public Paciente buscarPacientePorDocumento(String numeroDocumento) throws BadRequestException {
+        return pacienteRepository.findByNumeroDocumento(numeroDocumento)
+                .orElseThrow(() -> new BadRequestException("Paciente no encontrado"));
+    }
 
-        if (!paciente.isPresent()) {
-            throw new BadRequestException("Paciente con documento " 
-                    + numeroDocumento + " no encontrado");
-        }
-
-        return paciente.get();
+    @Override
+    public List<Paciente> listarPacientesPorFechaNacimientoDesc() {
+        return pacienteRepository.findAllByOrderByFechaNacimientoDesc();
     }
 }
