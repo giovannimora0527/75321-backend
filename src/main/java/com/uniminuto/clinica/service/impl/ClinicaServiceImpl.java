@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  * @author lmora
  */
 @Service
-public class CitaServiceImpl implements ClinicaService {
+public class ClinicaServiceImpl implements ClinicaService {
 
     @Override
     public RespuestaRs test() {

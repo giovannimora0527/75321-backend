@@ -9,9 +9,10 @@ import java.util.Optional;
 
 
 @Repository
-public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
+public interface PacienteRepository extends JpaRepository<Paciente, Long> {
     Optional<Paciente> findByNumDoc(String numDoc);
 
     List<Paciente> findAllByOrderByFecNacAsc();
 
+    Optional<Paciente> findById(Integer pacienteId);
 }
