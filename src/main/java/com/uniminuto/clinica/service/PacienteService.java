@@ -17,5 +17,8 @@ public interface PacienteService {
     
     Paciente buscarPacientePorDocumento(String documento) 
             throws BadRequestException;
+    
+    // Nuevo método para listar ordenado por fecha de nacimiento
+    List<Paciente> listarPacientesOrdenadosPorFechaNacimiento();
 }
 

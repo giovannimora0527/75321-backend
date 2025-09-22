@@ -8,9 +8,6 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import com.uniminuto.clinica.model.RespuestaRs;
-import com.uniminuto.clinica.model.PacienteRq;
-
 
 /**
  *
@@ -31,6 +28,11 @@ public class PacienteApiController implements PacienteApi {
             throws BadRequestException {
         return ResponseEntity.ok(this.pacienteService
                 .buscarPacientePorDocumento(numero_documento));
+    }
+    // Nuevo método implementado
+    @Override
+    public ResponseEntity<List<Paciente>> listarPacientesOrdenadosPorFechaNacimiento() {
+        return ResponseEntity.ok(this.pacienteService.listarPacientesOrdenadosPorFechaNacimiento());
     }
 }
 

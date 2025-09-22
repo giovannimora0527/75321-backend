@@ -40,9 +40,9 @@ public class Paciente implements Serializable{
     
     @Column (name = "apellidos")
     private String Ape;
-    
-    @Column (name = "fecha_nacimiento")
-    private String FecNac;
+
+    @Column(name = "fecha_nacimiento")
+    private String fechaNacimiento;
     
     @Column (name = "genero")
     private String Gen;
