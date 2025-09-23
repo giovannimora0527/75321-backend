@@ -26,7 +26,7 @@ public interface CitaApi {
     @RequestMapping(value = "/guardar",
             produces = {"application/json"},
             consumes = {"application/json"},
-            method = RequestMethod.GET)
+            method = RequestMethod.POST)
     ResponseEntity<RespuestaRs> guardarCitas(
             @RequestBody @Valid CitaRq citaRq
     ) throws BadRequestException;

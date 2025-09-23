@@ -26,7 +26,7 @@ public interface RecetaApi {
     @RequestMapping(value = "/guardar",
             produces = {"application/json"},
             consumes = {"application/json"},
-            method = RequestMethod.GET)
+            method = RequestMethod.POST)
     ResponseEntity<RespuestaRs> guardarRecetas(
             @RequestBody @Valid RecetaRq recetaRq
     ) throws BadRequestException;
