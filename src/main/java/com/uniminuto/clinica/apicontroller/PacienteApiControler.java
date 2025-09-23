@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class PacienteApiControler implements PacienteApi {
+
     @Autowired
     private PacienteService pacienteService;
 
@@ -31,5 +32,10 @@ public class PacienteApiControler implements PacienteApi {
                 throws BadRequestException{
        return ResponseEntity.ok(this.pacienteService
                .obtenerPacientePorDocumento(numeroDocumento));
+    }
+
+    @Override
+    public ResponseEntity<List<Paciente>> listarPacientesMayorAMenor() {
+        return ResponseEntity.ok(this.pacienteService.listarPacientesMayorAMenor());
     }
 }
