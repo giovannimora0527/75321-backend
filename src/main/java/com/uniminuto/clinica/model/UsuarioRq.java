@@ -11,5 +11,5 @@ public class UsuarioRq {
     private String username;
     private String password;
     private String rol;
-    
+    private boolean activo;
 }
