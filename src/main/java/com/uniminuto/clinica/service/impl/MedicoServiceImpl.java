@@ -30,7 +30,6 @@ public class MedicoServiceImpl implements MedicoService {
     }
 
     @Override
-
     public List<Medico> obtenerMedicosPorEspecializacion(String codigoEspec)
             throws BadRequestException {       
         Optional<Especializacion> optEsp = this.especializacionRepository

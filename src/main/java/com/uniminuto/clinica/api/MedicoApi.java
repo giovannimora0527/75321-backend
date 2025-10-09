@@ -20,11 +20,13 @@ public interface MedicoApi {
 
     @RequestMapping(value = "/listar",
             produces = {"application/json"},
+            consumes = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<List<Medico>> listarMedicos();
 
     @RequestMapping(value = "/buscar-por-especialidad",
             produces = {"application/json"},
+            consumes = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<List<Medico>> listarPorEspecialidad(
             @RequestParam String codigoEspecializacion

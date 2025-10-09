@@ -1,6 +1,7 @@
 package com.uniminuto.clinica.entity;
 
-
+import java.io.Serializable;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,47 +9,48 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
+/**
+ *
+ * @author lmora
+ */
 @Data
-@Getter
-@Setter
 @Entity
 @Table(name = "paciente")
+public class Paciente implements Serializable {
 
-public class Paciente{
+    /**
+     * Id serializable.
+     */
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
     
-    @Column (name = "usuario_id")
-    private Integer UsrId;
+    @Column(name = "tipo_documento")
+    private String tipoDocumento;
     
-    @Column (name = "tipo_documento")
-    private String TipDoc;
+    @Column(name = "numero_documento")
+    private String numeroDocmento;
     
-    @Column (name = "numero_documento")
-    private String numDoc;
+    @Column(name = "nombres")
+    private String nombres;
     
-    @Column (name = "nombres")
-    private String Nom;
+    @Column(name = "apellidos")
+    private String apellidos;
     
-    @Column (name = "apellidos")
-    private String Ape;
+    @Column(name = "fecha_nacimiento")
+    private LocalDate fechaNacimiento;
     
-    @Column (name = "fecha_nacimiento")
-    private String fecNac;
+    @Column(name = "genero")
+    private String genero;
     
-    @Column (name = "genero")
-    private String Gen;
+    @Column(name = "direccion")
+    private String direccion;
     
-    @Column (name = "telefono")
-    private String Tel;
+    @Column(name = "telefono")
+    private String telefono;
     
-    @Column (name = "direccion")
-    private String Dir;
 }

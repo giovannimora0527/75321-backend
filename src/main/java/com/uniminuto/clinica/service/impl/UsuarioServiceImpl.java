@@ -64,11 +64,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario nuevo = new Usuario();
         nuevo.setUsername(usuarioNuevo.getUsername()
                 .toLowerCase());
-        nuevo.setActivo(true);
         nuevo.setFechaCreacion(LocalDateTime.now());
         nuevo.setRol(usuarioNuevo.getRol().toUpperCase());
         nuevo.setPassword(this.convertirAHash(usuarioNuevo.getPassword()));
-
+        nuevo.setActivo(true);
         this.usuarioRepository.save(nuevo);
 
         // Devuelvo una respuesta que el usuario fue guardado
@@ -76,6 +75,14 @@ public class UsuarioServiceImpl implements UsuarioService {
         respuesta.setStatus(200);
         respuesta.setMensaje("El usuario se ha guardado con exito.");
         return respuesta;
+    }
+
+    @Override
+    public RespuestaRs actualizarUsuario(UsuarioRq usuario) throws BadRequestException {
+        /**
+         * TODO - Hacer la implementacion de actualizar un usuario existente.
+         */
+        return null;
     }
 
     private String convertirAHash(String textoAConvertir) {

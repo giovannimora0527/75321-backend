@@ -18,16 +18,17 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @CrossOrigin(origins = "*")
 @RequestMapping("/users")
-public interface
-UsuarioApi {
+public interface UsuarioApi {
 
     @RequestMapping(value = "/all",
             produces = {"application/json"},
+            consumes = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<List<Usuario>> listarUsuarios();
 
     @RequestMapping(value = "/find-username",
             produces = {"application/json"},
+            consumes = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<Usuario> encontrarUsuarioPorNombre(
             @RequestParam String username
@@ -35,6 +36,7 @@ UsuarioApi {
     
     @RequestMapping(value = "/find-by-role",
             produces = {"application/json"},
+            consumes = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<List<Usuario>> encontrarUsuariosPorRol(
             @RequestParam String role
@@ -52,7 +54,7 @@ UsuarioApi {
     @RequestMapping(value = "/actualizar",
             produces = {"application/json"},
             consumes = {"application/json"},
-            method = RequestMethod.PUT)
+            method = RequestMethod.POST)
     ResponseEntity<RespuestaRs> actualizarUsuario(
             @RequestBody UsuarioRq usuario
     ) throws BadRequestException;
