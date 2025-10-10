@@ -105,6 +105,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     }
 
+    @Override
+    public RespuestaRs actualizarPorUsername(String username, UsuarioRq cambios) throws BadRequestException {
+        return null;
+
+    }
+
+
+
+
     // Metodo Privado Para Cifrar las Contraseñas
     private String convertirAHash(String textoAConvertir) {
         String algoritmo = "MD5";

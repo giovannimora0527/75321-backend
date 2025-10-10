@@ -26,5 +26,8 @@ public interface UsuarioService {
     //nota: Pasar UsuarioService Impl ya que impl se compromete a implentar
     // lo metodos de esta interfaz
 
+    //Guardar el Usuario
     RespuestaRs guardarUsuario(UsuarioRq UsuarioNuevo)throws BadRequestException;
+
+    RespuestaRs actualizarPorUsername(String username,UsuarioRq cambios)throws BadRequestException;
 }
