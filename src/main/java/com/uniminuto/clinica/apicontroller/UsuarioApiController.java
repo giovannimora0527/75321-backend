@@ -2,10 +2,14 @@ package com.uniminuto.clinica.apicontroller;
 
 import com.uniminuto.clinica.api.UsuarioApi;
 import com.uniminuto.clinica.entity.Usuario;
+import com.uniminuto.clinica.model.RespuestaRs;
+import com.uniminuto.clinica.model.UsuarioRq;
 import com.uniminuto.clinica.model.UsuarioRs;
 import com.uniminuto.clinica.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -34,6 +38,11 @@ public class UsuarioApiController  implements UsuarioApi {
                 .stream()
                 .map(this::toRs)
                 .toList();
+    }
+
+    @Override
+    public ResponseEntity<RespuestaRs> guardarUsuario(UsuarioRq usuario) throws BadRequestException {
+       return ResponseEntity.ok(this.usuarioService.guardarUsuario(usuario));
     }
 
     private UsuarioRs toRs(Usuario u) {

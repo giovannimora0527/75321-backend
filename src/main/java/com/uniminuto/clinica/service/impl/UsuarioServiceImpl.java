@@ -2,10 +2,16 @@ package com.uniminuto.clinica.service.impl;
 
 import com.uniminuto.clinica.entity.Paciente;
 import com.uniminuto.clinica.entity.Usuario;
+import com.uniminuto.clinica.model.RespuestaRs;
+import com.uniminuto.clinica.model.UsuarioRq;
 import com.uniminuto.clinica.model.UsuarioRs;
 import com.uniminuto.clinica.repository.PacienteRepository;
 import com.uniminuto.clinica.repository.UsuarioRepository;
 import com.uniminuto.clinica.service.UsuarioService;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -71,4 +77,75 @@ public class UsuarioServiceImpl implements UsuarioService {
         return dto;
     }
 
+    @Override
+    public RespuestaRs guardarUsuario(UsuarioRq UsuarioNuevo) throws BadRequestException {
+        //Validar campos
+        this.isCamposObligatorios(UsuarioNuevo);
+
+        //validar que el usuario exista por el nombre
+        if(this.usuarioRepository
+                .existsByUsername(UsuarioNuevo.getUsername().toLowerCase())){
+            throw  new BadRequestException("El usuario ya existe.Intente de nuevo");
+        }
+        //Si no existe creo el usuario y lo guardo
+        Usuario nuevo=new Usuario();
+        nuevo.setUsername(UsuarioNuevo.getUsername().toLowerCase());
+        nuevo.setFechaCreacion(LocalDateTime.now());
+        nuevo.setRol(UsuarioNuevo.getRol().toUpperCase());
+        nuevo.setPasswordHash(this.convertirAHash(UsuarioNuevo.getPassword()));
+        nuevo.setActivo(true);
+        //Guardar en la base de datos
+        this.usuarioRepository.save(nuevo);
+
+        //Devolvemos Una respuesta
+        RespuestaRs respuesta=new RespuestaRs();
+        respuesta.setStatus(200);
+        respuesta.setMensaje("El usuario se guardado con exito");
+        return respuesta;
+
+    }
+
+    // Metodo Privado Para Cifrar las Contraseñas
+    private String convertirAHash(String textoAConvertir) {
+        String algoritmo = "MD5";
+        try {
+            MessageDigest md = MessageDigest.getInstance(algoritmo);
+            byte[] hashBytes = md.digest(textoAConvertir.getBytes());
+
+            // Convertir a hexadecimal
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Algoritmo no soportado: "
+                    + algoritmo, e);
+        }
+
+    }
+
+    //Metodo de Validacion de Flujo
+    private void isCamposObligatorios(UsuarioRq usuarioNuevo)
+            throws BadRequestException {
+        if (usuarioNuevo.getUsername() == null
+                || usuarioNuevo.getUsername().isBlank()
+                | usuarioNuevo.getUsername().isEmpty()) {
+            throw new BadRequestException("El campo username es obligatorio");
+        }
+        if (usuarioNuevo.getPassword() == null
+                || usuarioNuevo.getPassword().isBlank()
+                | usuarioNuevo.getPassword().isEmpty()) {
+            throw new BadRequestException("El campo password es obligatorio");
+        }
+
+        if (usuarioNuevo.getRol() == null
+                || usuarioNuevo.getRol().isBlank()
+                | usuarioNuevo.getRol().isEmpty()) {
+            throw new BadRequestException("El campo rol es obligatorio");
+        }
+    }
+
 }
+

@@ -1,9 +1,11 @@
 package com.uniminuto.clinica.api;
 
+import com.uniminuto.clinica.model.RespuestaRs;
+import com.uniminuto.clinica.model.UsuarioRq;
 import com.uniminuto.clinica.model.UsuarioRs;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.apache.coyote.BadRequestException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +19,16 @@ public interface UsuarioApi {
     //Listar Todos los usuarios
     @GetMapping("all")
     List<UsuarioRs> listarTodos();
+
+    //Guardar los Usuarios
+
+    @RequestMapping(value = "/guardar",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<RespuestaRs> guardarUsuario(
+            @RequestBody UsuarioRq usuario
+    ) throws BadRequestException;
 }
 
 //Endpoint
