@@ -4,10 +4,7 @@ import com.uniminuto.clinica.entity.Paciente;
 import com.uniminuto.clinica.model.PacienteRq;
 import com.uniminuto.clinica.model.PacienteRs;
 import org.apache.coyote.BadRequestException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +25,8 @@ public interface PacienteApi {
     //firma api Guardar Pacientes
     @PostMapping(value = "/guardar",consumes ="application/json",produces = "application/json")
     PacienteRs guardarPaciente(@RequestBody PacienteRq pacienteNuevo)throws BadRequestException;
+
+    //Firma api actualizar Pacientes
+    @PutMapping(value = "/actualizar",consumes = "application/json",produces = "application/json")
+    PacienteRs actualizarPaciente(@RequestBody PacienteRq pacienteEditado) throws BadRequestException;
 }

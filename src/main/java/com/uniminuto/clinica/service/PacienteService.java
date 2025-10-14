@@ -6,6 +6,7 @@ import com.uniminuto.clinica.model.PacienteRs;
 import org.apache.coyote.BadRequestException;
 
 import java.util.List;//Importar List
+import java.util.Map;
 
 public interface PacienteService {
     //Firmamos el metodo
@@ -18,4 +19,11 @@ public interface PacienteService {
 
     //metodo para guardar el Paciente
     PacienteRs guardarPaciente(PacienteRq pacienteNuevo)throws BadRequestException;
+
+    //metodo para actualizar el Paciente
+    PacienteRs actualizarPaciente(PacienteRq pacienteEditado)throws  BadRequestException;
+
+    //patch actulizar ciertos campos
+    PacienteRs actualizarParcial(Long id, Map<String, Object> camposActualizados) throws BadRequestException;
+
 }

@@ -28,4 +28,14 @@ public interface PacienteRepository extends JpaRepository<Paciente,Long> {
     boolean existsByNumeroDocumento(String numeroDocumento);
 
     boolean existsByUsuarioId(Long usuarioId);
+
+    //consultas extra actualizar Paciente
+    //Numero Duplicado del Registro
+    boolean existsByUsuario_IdAndIdNot(Long usuarioId, Long id);
+
+    //Usuario ya asociado a otro paciente
+    boolean existsByNumeroDocumentoAndIdNot(String numeroDocumento, Long id);
+
+    //actualizacion parcial
+    boolean existsByUsuarioIdAndIdNot(Long userId, Long id);
 }

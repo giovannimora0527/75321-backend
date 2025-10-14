@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PacienteRq {
+    private Long id;
     private Long usuarioId;
     private String tipoDocumento;
     private String numeroDocumento;

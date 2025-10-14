@@ -37,5 +37,10 @@ public class PacienteApiController implements PacienteApi {
         return pacienteService.guardarPaciente(pacienteNuevo);
     }
 
+    @Override
+    public PacienteRs actualizarPaciente(PacienteRq pacienteEditado) throws BadRequestException {
+        return pacienteService.actualizarPaciente(pacienteEditado);
+    }
+
 
 }
