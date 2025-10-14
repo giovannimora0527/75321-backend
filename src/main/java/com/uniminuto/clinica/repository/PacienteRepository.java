@@ -23,4 +23,9 @@ public interface PacienteRepository extends JpaRepository<Paciente,Long> {
 
     //ordenar por fecha de nacimiento(creamosMetodo)
     List<Paciente> findAllByOrderByFechaNacimientoAsc();
+
+    //consulta para guardar los pacientes
+    boolean existsByNumeroDocumento(String numeroDocumento);
+
+    boolean existsByUsuarioId(Long usuarioId);
 }

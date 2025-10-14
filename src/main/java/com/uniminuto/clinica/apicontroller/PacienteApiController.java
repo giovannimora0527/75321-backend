@@ -2,8 +2,11 @@ package com.uniminuto.clinica.apicontroller;
 
 import com.uniminuto.clinica.api.PacienteApi;
 import com.uniminuto.clinica.entity.Paciente;
+import com.uniminuto.clinica.model.PacienteRq;
+import com.uniminuto.clinica.model.PacienteRs;
 import com.uniminuto.clinica.service.PacienteService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,11 @@ public class PacienteApiController implements PacienteApi {
     @Override
     public List<Paciente> listarPorFechaNacimientoAsc() {
         return pacienteService.listarPorFechaNacimientoAsc();
+    }
+
+    @Override
+    public PacienteRs guardarPaciente(PacienteRq pacienteNuevo) throws BadRequestException {
+        return pacienteService.guardarPaciente(pacienteNuevo);
     }
 
 

@@ -1,6 +1,9 @@
 package com.uniminuto.clinica.service;
 
 import com.uniminuto.clinica.entity.Paciente;
+import com.uniminuto.clinica.model.PacienteRq;
+import com.uniminuto.clinica.model.PacienteRs;
+import org.apache.coyote.BadRequestException;
 
 import java.util.List;//Importar List
 
@@ -12,4 +15,7 @@ public interface PacienteService {
 
     //Nuevo metodo organizar Fecha_Nacimiento
     List<Paciente>listarPorFechaNacimientoAsc();
+
+    //metodo para guardar el Paciente
+    PacienteRs guardarPaciente(PacienteRq pacienteNuevo)throws BadRequestException;
 }
