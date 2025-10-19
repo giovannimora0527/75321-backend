@@ -5,10 +5,7 @@ import com.uniminuto.clinica.entity.Usuario;
 import java.util.List;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -18,18 +15,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/medico")
 public interface MedicoApi {
 
-    @RequestMapping(value = "/listar",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.GET)
+    @GetMapping(value = "/listar", produces = "application/json")
     ResponseEntity<List<Medico>> listarMedicos();
 
-    @RequestMapping(value = "/buscar-por-especialidad",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.GET)
+    @GetMapping(value = "/buscar-por-especialidad", produces = "application/json")
     ResponseEntity<List<Medico>> listarPorEspecialidad(
             @RequestParam String codigoEspecializacion
     ) throws BadRequestException;
 
+    @PostMapping(value = "/guardar" , consumes = "application/json", produces = "application/json")
+    ResponseEntity<Medico>
+        guardar(@RequestBody Medico medico) throws BadRequestException;
 }

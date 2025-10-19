@@ -3,12 +3,10 @@ package com.uniminuto.clinica.api;
 import com.uniminuto.clinica.entity.Medicamento;
 import com.uniminuto.clinica.model.MedicamentoRq;
 import com.uniminuto.clinica.model.RespuestaRs;
+import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,26 +14,21 @@ import java.util.List;
 @RequestMapping("/medicamento")
 public interface MedicamentoApi {
 
-    @RequestMapping(value = "/listar",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.GET)
+    @GetMapping(value = "/listar", produces = "application/json")
     ResponseEntity<List<Medicamento>> listarMedicamentos();
 
-
-    @RequestMapping(value = "/guardar",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.POST)
+    @PostMapping(value = "/guardar",
+            produces = "application/json",
+            consumes = "application/json")
     ResponseEntity<RespuestaRs> guardarMedicamento(
-       @RequestBody MedicamentoRq medicamentoRq
+            @RequestBody @Valid MedicamentoRq medicamentoRq
     ) throws BadRequestException;
 
-    @RequestMapping(value = "/actualizar",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.POST)
+    @PostMapping(value = "/actualizar",
+            produces = "application/json",
+            consumes = "application/json")
     ResponseEntity<RespuestaRs> actualizarMedicamento(
-            @RequestBody MedicamentoRq medicamentoRq
+            @RequestBody @Valid MedicamentoRq medicamentoRq
     ) throws BadRequestException;
+
 }

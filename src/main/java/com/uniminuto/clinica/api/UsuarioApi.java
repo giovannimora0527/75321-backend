@@ -6,13 +6,7 @@ import com.uniminuto.clinica.model.UsuarioRq;
 import java.util.List;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -21,43 +15,27 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*")
 @RequestMapping("/users")
 public interface UsuarioApi {
-
-    @RequestMapping(value = "/all",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.GET)
+    @GetMapping(value = "/all", produces = "application/json")
     ResponseEntity<List<Usuario>> listarUsuarios();
 
-    @RequestMapping(value = "/find-username",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.GET)
+    @GetMapping(value = "/find-username", produces = "application/json")
     ResponseEntity<Usuario> encontrarUsuarioPorNombre(
             @RequestParam String username
     ) throws BadRequestException;
-    
-    @RequestMapping(value = "/find-by-role",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.GET)
+
+    @GetMapping(value = "/find-by-role", produces = "application/json")
     ResponseEntity<List<Usuario>> encontrarUsuariosPorRol(
             @RequestParam String role
     );
-    
-    @RequestMapping(value = "/guardar",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.POST)
+
+    @PostMapping(value = "/guardar", produces = "application/json", consumes = "application/json")
     ResponseEntity<RespuestaRs> guardarUsuario(
             @RequestBody UsuarioRq usuario
     ) throws BadRequestException;
-    
-    
-    @RequestMapping(value = "/actualizar",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.POST)
+
+    @PostMapping(value = "/actualizar", produces = "application/json", consumes = "application/json")
     ResponseEntity<RespuestaRs> actualizarUsuario(
-            @Valid @RequestBody UsuarioRq usuario
+            @RequestBody UsuarioRq usuario
     ) throws BadRequestException;
+
 }
