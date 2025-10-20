@@ -46,7 +46,7 @@ public class UsuarioApiController implements UsuarioApi {
 
     @Override
     public ResponseEntity<RespuestaRs> actualizarUsuario(UsuarioRq usuario) throws BadRequestException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return ResponseEntity.ok(this.usuarioService.actualizarUsuario(usuario));
     }
 
 }

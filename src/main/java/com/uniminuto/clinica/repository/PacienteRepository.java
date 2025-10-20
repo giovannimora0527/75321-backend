@@ -6,10 +6,15 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author AORUS
+ */
+
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
-
-    Optional<Paciente> findByNumDoc(String numDoc);
-
+    Optional<Paciente> findByNumeroDocumento(String numeroDocumento);
+    
     List<Paciente> findAllByOrderByFechaNacimientoDesc();
+    
+    boolean existsByNumeroDocumento(String numeroDocumento);
 }

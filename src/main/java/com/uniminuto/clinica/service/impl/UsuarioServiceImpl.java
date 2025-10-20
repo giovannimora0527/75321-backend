@@ -64,11 +64,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario nuevo = new Usuario();
         nuevo.setUsername(usuarioNuevo.getUsername()
                 .toLowerCase());
-        nuevo.setActivo(true);
         nuevo.setFechaCreacion(LocalDateTime.now());
         nuevo.setRol(usuarioNuevo.getRol().toUpperCase());
         nuevo.setPassword(this.convertirAHash(usuarioNuevo.getPassword()));
-
+        nuevo.setActivo(true);
         this.usuarioRepository.save(nuevo);
 
         // Devuelvo una respuesta que el usuario fue guardado
@@ -76,6 +75,36 @@ public class UsuarioServiceImpl implements UsuarioService {
         respuesta.setStatus(200);
         respuesta.setMensaje("El usuario se ha guardado con exito.");
         return respuesta;
+    }
+
+    @Override
+    public RespuestaRs actualizarUsuario(UsuarioRq usuario) throws BadRequestException {
+        /**
+          TODO - Hacer la implementacion de actualizar un usuario existente.
+         */
+        Optional<Usuario> optUser = this.usuarioRepository.findById(usuario.getId());
+        if (optUser.isEmpty()) {
+            throw new BadRequestException("El usuario no existe. No se puede actualizar");
+        }
+
+        Usuario userActual = optUser.get();
+        if (!userActual.getUsername().equals(usuario.getUsername())) {
+            // Consulto si existe un usuario por username
+            Optional<Usuario> optUserByName = this.usuarioRepository.findByUsername(usuario.getUsername());
+            if (optUserByName.isPresent()) {
+                throw new BadRequestException("El nombre de usuario ya existe. No se puede actualizar");
+            }
+            userActual.setUsername(usuario.getUsername());
+        }
+
+        userActual.setPassword(this.convertirAHash(usuario.getPassword()));
+        userActual.setRol(usuario.getRol());
+        userActual.setActivo(usuario.getActivo());
+        this.usuarioRepository.save(userActual);
+        RespuestaRs rta = new RespuestaRs();
+        rta.setStatus(200);
+        rta.setMensaje("Se ha actualizado el usuario con exito.");
+        return rta;
     }
 
     private String convertirAHash(String textoAConvertir) {
