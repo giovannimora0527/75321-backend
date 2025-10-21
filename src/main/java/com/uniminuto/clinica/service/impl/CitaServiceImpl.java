@@ -36,17 +36,17 @@ public class CitaServiceImpl implements CitaService {
 
     @Override
     public RespuestaRs guardarCita(CitaRq citaRq) throws BadRequestException {
-        Optional<Paciente> optPaciente = this.pacienteRepository.findById(citaRq.getPacienteId().intValue());
+        Optional<Paciente> optPaciente = this.pacienteRepository.findById(citaRq.getPacienteId());
         if (optPaciente.isEmpty()) {
             throw new BadRequestException("El paciente no existe");
         }
 
-        Optional<Medico> optMedico = this.medicoRepository.findById(citaRq.getMedicoId().intValue());
+        Optional<Medico> optMedico = this.medicoRepository.findById(citaRq.getMedicoId());
         if (optMedico.isEmpty()) {
-            throw new BadRequestException("El medico no existe");
+            throw new BadRequestException("El medico no existe");   
         }
 
-        LocalDateTime fechaInicioCita = LocalDateTime.parse(citaRq.getFechaHora());
+        LocalDateTime fechaInicioCita = citaRq.getFechaHora();
         LocalDateTime fechaFinCita = fechaInicioCita.plusMinutes(15);
 
         List<Cita> citasExistentesMedico = this.citaRepository.findByMedicoAndFechaHoraBetween(
@@ -74,9 +74,9 @@ public class CitaServiceImpl implements CitaService {
         Cita cita = new Cita();
         cita.setPaciente(paciente);
         cita.setMedico(medico);
-        cita.setFechaHora(LocalDateTime.parse(citaRq.getFechaHora()));
+        cita.setFechaHora(citaRq.getFechaHora());
         cita.setMotivo(citaRq.getMotivo());
-        cita.setEstado("PROGRAMADA");
+        cita.setEstado(citaRq.getEstado() != null ? citaRq.getEstado() : "PROGRAMADA");
         return cita;
     }
 

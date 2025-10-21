@@ -2,7 +2,7 @@ package com.uniminuto.clinica.entity;
 
 import lombok.Data;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -31,9 +31,6 @@ public class Receta implements Serializable {
 
     @Column(name = "indicaciones", columnDefinition = "text")
     private String indicaciones;
-
-    @Column(name = "descripcion", columnDefinition = "text")
-    private String descripcion;
 
     @Column(name = "fecha_creacion_registro")
     private LocalDateTime fechaCreacionRegistro;

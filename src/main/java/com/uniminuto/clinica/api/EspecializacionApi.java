@@ -1,7 +1,7 @@
 package com.uniminuto.clinica.api;
 
-import com.uniminuto.clinica.entity.Receta;
-import com.uniminuto.clinica.model.RecetaRq;
+import com.uniminuto.clinica.entity.Especializacion;
+import com.uniminuto.clinica.model.EspecializacionRq;
 import com.uniminuto.clinica.model.RespuestaRs;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
@@ -14,22 +14,19 @@ import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
-@RequestMapping("/receta")
-public interface RecetaApi {
+@RequestMapping("/especializacion")
+public interface EspecializacionApi {
 
     @RequestMapping(value = "/listar",
             produces = {"application/json"},
-            consumes = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<List<Receta>> listarRecetas();
+    ResponseEntity<List<Especializacion>> listarEspecializaciones();
 
     @RequestMapping(value = "/guardar",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity<RespuestaRs> guardarRecetas(
-            @RequestBody @Valid RecetaRq recetaRq
+    ResponseEntity<RespuestaRs> guardarEspecializacion(
+            @RequestBody @Valid EspecializacionRq especializacionRq
     ) throws BadRequestException;
-
-
 }

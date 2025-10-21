@@ -2,8 +2,9 @@ package com.uniminuto.clinica.model;
 
 import lombok.Data;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 public class CitaRq {
@@ -15,7 +16,7 @@ public class CitaRq {
     private Long medicoId;
 
     @NotNull(message = "La fecha y hora son obligatorias")
-    private String fechaHora;
+    private LocalDateTime fechaHora;
 
     @NotBlank(message = "El estado es obligatorio")
     private String estado;

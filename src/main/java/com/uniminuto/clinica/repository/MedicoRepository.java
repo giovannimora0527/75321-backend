@@ -7,12 +7,18 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+/**
+ *
+ * @author lmora
+ */
 @Repository
-public interface MedicoRepository extends JpaRepository<Medico, Integer> {
-
+public interface MedicoRepository extends JpaRepository<Medico, Long> {
+    
     List<Medico> findByEspecializacion(Especializacion e);
+    
+    Optional<Medico> findByRegistroProfesional(String registro);
 
-    Optional<Medico> findByRegistroProfesional(String registroProfesional);
+    boolean existsByNumeroDocumento(String numeroDocumento);
 
-    Optional<Medico> findByNombres(String nombres);
+    Optional<Medico> findByNumeroDocumento(String numeroDocumento);
 }

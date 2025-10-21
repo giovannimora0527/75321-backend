@@ -1,22 +1,16 @@
 package com.uniminuto.clinica.service.impl;
 
 import com.uniminuto.clinica.entity.Especializacion;
-import com.uniminuto.clinica.entity.Medicamento;
-import com.uniminuto.clinica.entity.Medico;
-import com.uniminuto.clinica.model.MedicamentoRq;
-import com.uniminuto.clinica.model.MedicoRq;
 import com.uniminuto.clinica.model.RespuestaRs;
+import com.uniminuto.clinica.entity.Medico;
 import com.uniminuto.clinica.repository.EspecializacionRepository;
 import com.uniminuto.clinica.repository.MedicoRepository;
 import com.uniminuto.clinica.service.MedicoService;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 /**
  *
@@ -50,38 +44,76 @@ public class MedicoServiceImpl implements MedicoService {
     }
 
     @Override
-    public Medico guardar(Medico medico){
-        return medicoRepository.save(medico);
-    }
+    public RespuestaRs guardarMedico(Medico medico) throws BadRequestException {
+        this.isCamposObligatorios(medico);
 
-    private void validarCampos(MedicoRq medicoRq) throws BadRequestException {
-        if (medicoRq.getNombres() == null || medicoRq.getNombres().isEmpty()) {
-            throw new BadRequestException("El campo nombre es obligatorio");
+        if(this.medicoRepository.existsByNumeroDocumento(medico.getNumeroDocumento().toLowerCase())){
+            throw new BadRequestException("El medico ya existe. Intente de nuevo.");
         }
-        if (medicoRq.getApellidos() == null || medicoRq.getApellidos().isEmpty()) {
-            throw new BadRequestException("El campo apellidos es obligatorio");
-        }
-        if (medicoRq.getTelefono() == null || medicoRq.getTelefono().isEmpty()) {
-            throw new BadRequestException("El campo telefono es obligatorio");
-        }
-        if (medicoRq.getNumeroDocumento() == null || medicoRq.getNumeroDocumento().isEmpty()) {
-            throw new BadRequestException("El campo documento es obligatorio");
-        }
-    }
 
-    private Medico convertirAMedico(MedicoRq medicoRq) {
-        Medico nueva = new Medico();
-        nueva.setNombres(medicoRq.getNombres());
-        nueva.setNombres(medicoRq.getApellidos());
-        nueva.setTelefono(medicoRq.getTelefono());
-        nueva.setNumeroDocumento(medicoRq.getNumeroDocumento());
-        return nueva;
-    }
+        Medico nuevoMedico = new Medico();
+        nuevoMedico.setTipoDocumento(nuevoMedico.getTipoDocumento().toLowerCase());
+        nuevoMedico.setNumeroDocumento(nuevoMedico.getNumeroDocumento().toLowerCase());
+        nuevoMedico.setNombres(nuevoMedico.getNombres().toLowerCase());
+        nuevoMedico.setApellidos(nuevoMedico.getApellidos().toLowerCase());
+        nuevoMedico.setRegistroProfesional(nuevoMedico.getRegistroProfesional().toLowerCase());
+        nuevoMedico.setTelefono(nuevoMedico.getTelefono().toLowerCase());
+        nuevoMedico.setEspecializacion(nuevoMedico.getEspecializacion());
 
+        this.medicoRepository.save(nuevoMedico);
+
+        RespuestaRs respuesta = new RespuestaRs();
+        respuesta.setStatus(200);
+        respuesta.setMensaje("Medico creado exitosamente.");
+        return respuesta;
+    }
 
     @Override
-    public RespuestaRs actualizarMedico(MedicoRq medicoRq) throws BadRequestException {
-        return null;
+    public RespuestaRs actualizarMedico(Medico medico) throws BadRequestException {
+        Optional<Medico> optMedico = this.medicoRepository.findById(medico.getId());
+        if (optMedico.isEmpty()) {
+            throw new BadRequestException("El medico no existe. No se puede actualizar");
+        }
+
+        Medico medicoActual = optMedico.get();
+        if (!medicoActual.getNumeroDocumento().equals(medico.getNumeroDocumento())) {
+            // Consulto si existe un medico por número de documento
+            Optional<Medico> optMedicoByDocumento = this.medicoRepository.findByNumeroDocumento(medico.getNumeroDocumento());
+            if (optMedicoByDocumento.isPresent()) {
+                throw new BadRequestException("El medico ya existe. No se puede actualizar");
+            }
+            medicoActual.setNumeroDocumento(medico.getNumeroDocumento());
+        }
+
+        medicoActual.setNombres(medico.getNombres());
+        medicoActual.setApellidos(medico.getApellidos());
+        medicoActual.setRegistroProfesional(medico.getRegistroProfesional());
+        medicoActual.setEspecializacion(medico.getEspecializacion());
+        medicoActual.setTelefono(medico.getTelefono());
+        this.medicoRepository.save(medicoActual);
+        RespuestaRs rta = new RespuestaRs();
+        rta.setStatus(200);
+        rta.setMensaje("Se ha actualizado el medico con exito.");
+        return rta;
+    }
+
+
+    private void isCamposObligatorios(Medico medico) throws BadRequestException {
+        if (medico.getNumeroDocumento() == null
+                || medico.getNumeroDocumento().isEmpty()) {
+            throw new BadRequestException("El numero de documento es obligatorio.");
+        }
+        if (medico.getNombres() == null
+                || medico.getNombres().isEmpty()) {
+            throw new BadRequestException("El nombre es obligatorio.");
+        }
+        if (medico.getApellidos() == null
+                || medico.getApellidos().isEmpty()) {
+            throw new BadRequestException("El apellido es obligatorio.");
+        }
+        if (medico.getEspecializacion() == null) {
+            throw new BadRequestException("La especializacion es obligatoria.");
+        }
     }
 
 }

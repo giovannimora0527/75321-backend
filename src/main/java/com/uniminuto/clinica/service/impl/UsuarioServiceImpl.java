@@ -82,7 +82,29 @@ public class UsuarioServiceImpl implements UsuarioService {
         /**
          * TODO - Hacer la implementacion de actualizar un usuario existente.
          */
-        return null;
+        Optional<Usuario> optUser = this.usuarioRepository.findById(usuario.getId());
+        if (optUser.isEmpty()) {
+            throw new BadRequestException("El usuario no existe. No se puede actualizar");
+        }
+
+        Usuario userActual = optUser.get();
+        if (!userActual.getUsername().equals(usuario.getUsername())) {
+            // Consulto si existe un usuario por username
+            Optional<Usuario> optUserByName = this.usuarioRepository.findByUsername(usuario.getUsername());
+            if (optUserByName.isPresent()) {
+                throw new BadRequestException("El nombre de usuario ya existe. No se puede actualizar");
+            }
+            userActual.setUsername(usuario.getUsername());
+        }
+
+        userActual.setPassword(this.convertirAHash(usuario.getPassword()));
+        userActual.setRol(usuario.getRol());
+        userActual.setActivo(usuario.getActivo());
+        this.usuarioRepository.save(userActual);
+        RespuestaRs rta = new RespuestaRs();
+        rta.setStatus(200);
+        rta.setMensaje("Se ha actualizado el usuario con exito.");
+        return rta;
     }
 
     private String convertirAHash(String textoAConvertir) {
