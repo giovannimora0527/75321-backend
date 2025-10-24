@@ -108,6 +108,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public RespuestaRs actualizarPorUsername(String username, UsuarioRq cambios) throws BadRequestException {
         return null;
+        //consultar si existe el usuario
+
+        //devolver Respuesta actualizada
 
     }
 

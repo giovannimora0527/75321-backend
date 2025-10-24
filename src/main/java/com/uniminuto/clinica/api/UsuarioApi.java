@@ -29,6 +29,7 @@ public interface UsuarioApi {
     ResponseEntity<RespuestaRs> guardarUsuario(
             @RequestBody UsuarioRq usuario
     ) throws BadRequestException;
+    //Actualizar usuario Hacer crud
 }
 
 //Endpoint

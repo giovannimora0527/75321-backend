@@ -3,10 +3,7 @@ package com.uniminuto.clinica.api;
 import com.uniminuto.clinica.model.CrearRecetaRq;
 import com.uniminuto.clinica.model.RecetaRs;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,5 +26,11 @@ public interface RecetaApi {
     @GetMapping(value = "/recientes")
     List<RecetaRs> listarRecientes(); //Listamos el Model
 
+    //Firma actualizacion
+
+    @PostMapping(path = "/actualizar/{id}",
+    consumes = MediaType.APPLICATION_JSON_VALUE,
+    produces = MediaType.APPLICATION_JSON_VALUE)
+    RecetaRs actualizar(@PathVariable Long id,@Valid @RequestBody CrearRecetaRq rq);
 
 }

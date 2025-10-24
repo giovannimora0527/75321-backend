@@ -13,4 +13,7 @@ public interface RecetaService {
     //Funcionalidad
 
     List<RecetaRs> listarRecientes();
+
+    //Metodo para actualizar con post
+    RecetaRs actualizar(Long id,CrearRecetaRq rq);
 }

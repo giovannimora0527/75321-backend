@@ -67,6 +67,38 @@ public class RecetaServiceImpl implements RecetaService {
         return recetaRepository.findAllByOrderByFechaCreacionRegistroDesc().stream().map(this::toDto).collect(Collectors.toList());
 
     }
+
+    @Override
+    public RecetaRs actualizar(Long id, CrearRecetaRq rq) {
+        //Buscar la receta existente
+         Receta receta=recetaRepository.findById(id)
+                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"la receta no existe"));
+         //Validar la existencia de una cita y medicamento
+        Cita cita=citaRepository.findById(rq.getCitaId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"La cita no existe"));
+
+        Medicamento medicamento=medicamentoRepository.findById(rq.getMedicamentoId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"El medicamento no existe"));
+
+        //actualizamos campos
+        receta.setCita(cita);
+        receta.setMedicamento(medicamento);
+        receta.setDosis(rq.getDosis());
+        receta.setIndicaciones(rq.getIndicaciones());
+        //guardamos campos
+        recetaRepository.save(receta);
+        //retornar la respuesta
+        return new RecetaRs(
+                receta.getId(),
+                receta.getCita().getId(),
+                receta.getMedicamento().getId(),
+                receta.getMedicamento().getName(),
+                receta.getDosis(),
+                receta.getIndicaciones(),
+                receta.getFechaCreacionRegistro()
+        );
+    }
+
     //Hacemos privado este metodo usamos map.collectors y stream
     private RecetaRs toDto(Receta r){
         Medicamento m=r.getMedicamento();

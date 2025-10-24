@@ -26,5 +26,10 @@ public class RecetaApiController implements RecetaApi {
         return recetaService.listarRecientes();
     }
 
+    @Override
+    public RecetaRs actualizar(Long id, CrearRecetaRq rq) {
+        return recetaService.actualizar(id,rq);
+    }
+
 
 }
