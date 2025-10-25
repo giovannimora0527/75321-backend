@@ -55,6 +55,7 @@ public class SecurityConfig {
                 "http://127.0.0.1:8080",
                 "http://127.0.0.1:4200",
                 "http://10.0.5.50:8080",
+                "http://localhost:52693",
                 "http://10.0.5.50:4200"));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
