@@ -13,4 +13,10 @@ public interface EspecializacionRepository
     // útiles también:
     boolean existsByCodigoEspecializacion(String codigo);
     Optional<Especializacion> findByNombre(String nombre);
+
+    //Validar el nombre de la especilizacion
+    boolean existsByNombreIgnoreCase(String nombre);
+
+    //Buscar por nombre exacto
+    Optional<Especializacion> findByNombreIgnoreCase(String nombre);
 }
