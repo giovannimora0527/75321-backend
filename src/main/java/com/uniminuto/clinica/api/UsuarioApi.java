@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
+
 /**
  *
  * @author lmora
@@ -56,6 +58,6 @@ public interface UsuarioApi {
             consumes = {"application/json"},
             method = RequestMethod.POST)
     ResponseEntity<RespuestaRs> actualizarUsuario(
-            @RequestBody UsuarioRq usuario
+            @Valid @RequestBody UsuarioRq usuario
     ) throws BadRequestException;
 }
