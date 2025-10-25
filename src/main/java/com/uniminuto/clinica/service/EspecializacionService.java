@@ -11,4 +11,7 @@ public interface EspecializacionService {
 
     //Listar unicamente las especilidades
     List<EspecializacionRs> listar();
+
+    //Actualizar especializacion
+    EspecializacionRs actualizar(Long id, CrearEspecializacionRq rq);
 }

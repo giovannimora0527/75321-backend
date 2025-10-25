@@ -16,4 +16,11 @@ public interface EspecializacionApi {
 
     @GetMapping("/listar")
     ResponseEntity<List<EspecializacionRs>> listar();
+
+    //actualizar Especializacion
+    @PostMapping(value = "/actualizar/{id}", produces = "application/json")
+    EspecializacionRs actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody CrearEspecializacionRq rq
+    );
 }

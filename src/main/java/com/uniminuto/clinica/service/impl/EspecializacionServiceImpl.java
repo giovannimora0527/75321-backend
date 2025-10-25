@@ -58,6 +58,51 @@ public class EspecializacionServiceImpl implements EspecializacionService {
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public EspecializacionRs actualizar(Long id, CrearEspecializacionRq rq) {
+        // 1) Buscar existente
+        Especializacion existente = especializacionRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "La especialización con id " + id + " no existe"
+                ));
+        // 2) Normalizar entrada
+        String nombre  = rq.getNombre().trim();
+        String desc    = rq.getDescripcion().trim();
+        String codigo  = rq.getCodigoEspecializacion().trim().toUpperCase();
+
+        // 3) Validar duplicado por nombre (ignorando el mismo id)
+        especializacionRepository.findByNombre(nombre)
+                .filter(e -> !e.getId().equals(id))
+                .ifPresent(e -> { throw new ResponseStatusException(
+                        HttpStatus.CONFLICT, "Ya existe una especialización con ese nombre"
+                );});
+
+        // 4) Validar duplicado por código (ignorando el mismo id)
+        especializacionRepository.findByCodigoEspecializacion(codigo)
+                .filter(e -> !e.getId().equals(id))
+                .ifPresent(e -> { throw new ResponseStatusException(
+                        HttpStatus.CONFLICT, "Ya existe una especialización con ese código"
+                );});
+
+        // 5) Actualizar campos
+        existente.setNombre(nombre);
+        existente.setDescripcion(desc);
+        existente.setCodigoEspecializacion(codigo);
+
+        // 6) Guardar y mapear a RS
+        Especializacion guardada = especializacionRepository.save(existente);
+
+        return EspecializacionRs.builder()
+                .id(guardada.getId())
+                .nombre(guardada.getNombre())
+                .descripcion(guardada.getDescripcion())
+                .codigoEspecializacion(guardada.getCodigoEspecializacion())
+                .build();
+
+    }
+
     //Metodo Privado Para Mapear
     private EspecializacionRs toDto(Especializacion e) {
         return EspecializacionRs.builder()

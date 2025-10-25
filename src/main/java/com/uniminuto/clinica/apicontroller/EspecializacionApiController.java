@@ -23,4 +23,9 @@ public class EspecializacionApiController implements EspecializacionApi {
     public ResponseEntity<List<EspecializacionRs>> listar() {
         return ResponseEntity.ok(especializacionService.listar());
     }
+
+    @Override
+    public EspecializacionRs actualizar(Long id, CrearEspecializacionRq rq) {
+        return especializacionService.actualizar(id, rq);
+    }
 }

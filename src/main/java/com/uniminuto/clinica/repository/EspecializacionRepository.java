@@ -19,4 +19,6 @@ public interface EspecializacionRepository
 
     //Buscar por nombre exacto
     Optional<Especializacion> findByNombreIgnoreCase(String nombre);
+
+
 }
