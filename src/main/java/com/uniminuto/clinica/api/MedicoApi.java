@@ -1,7 +1,6 @@
 package com.uniminuto.clinica.api;
 
 import com.uniminuto.clinica.entity.Medico;
-import com.uniminuto.clinica.entity.Usuario;
 import java.util.List;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
@@ -11,25 +10,38 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * API para gestión de médicos.
  *
  * @author lmora
  */
-@CrossOrigin(origins = "*")
 @RequestMapping("/medico")
 public interface MedicoApi {
 
-    @RequestMapping(value = "/listar",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.GET)
+    /**
+     * Lista todos los médicos.
+     *
+     * @return lista de médicos
+     */
+    @RequestMapping(
+            value = "/listar",
+            method = RequestMethod.GET,
+            produces = "application/json"
+    )
     ResponseEntity<List<Medico>> listarMedicos();
 
-    @RequestMapping(value = "/buscar-por-especialidad",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.GET)
+    /**
+     * Busca médicos por especialidad.
+     *
+     * @param codigoEspecializacion código de especialidad
+     * @return lista de médicos
+     * @throws BadRequestException si código inválido
+     */
+    @RequestMapping(
+            value = "/buscar-por-especialidad",
+            method = RequestMethod.GET,
+            produces = "application/json"
+    )
     ResponseEntity<List<Medico>> listarPorEspecialidad(
             @RequestParam String codigoEspecializacion
     ) throws BadRequestException;
-
 }

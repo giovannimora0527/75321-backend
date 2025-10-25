@@ -7,29 +7,32 @@ import java.util.List;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.GetMapping;
 
-/**
- *
- * @author lmora
- */
 @RestController
+@RequestMapping("/medico")
+@CrossOrigin(origins = "*")
 public class MedicoApiController implements MedicoApi {
-    
+
     @Autowired
     private MedicoService medicoService;
 
     @Override
+    @GetMapping("/listar")
     public ResponseEntity<List<Medico>> listarMedicos() {
         return ResponseEntity.ok(this.medicoService.listarTodo());
     }
 
     @Override
-    public ResponseEntity<List<Medico>> 
-        listarPorEspecialidad(String codigoEspecializacion) 
-                throws BadRequestException{
-       return ResponseEntity.ok(this.medicoService
-               .obtenerMedicosPorEspecializacion(codigoEspecializacion));
+    @GetMapping("/buscar-por-especialidad")
+    public ResponseEntity<List<Medico>> listarPorEspecialidad(
+            @RequestParam String codigoEspecializacion) throws BadRequestException {
+        return ResponseEntity.ok(
+                this.medicoService.obtenerMedicosPorEspecializacion(codigoEspecializacion)
+        );
     }
-    
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * API para gestión de usuarios.
  *
  * @author lmora
  */
@@ -17,12 +18,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/users")
 public interface UsuarioApi {
 
+    /**
+     * Lista todos los usuarios.
+     *
+     * @return lista de usuarios
+     */
     @RequestMapping(value = "/all",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<List<Usuario>> listarUsuarios();
 
+    /**
+     * Busca usuario por nombre.
+     *
+     * @param username nombre de usuario
+     * @return usuario encontrado
+     * @throws BadRequestException si username inválido
+     */
     @RequestMapping(value = "/find-username",
             produces = {"application/json"},
             consumes = {"application/json"},
@@ -30,7 +43,13 @@ public interface UsuarioApi {
     ResponseEntity<Usuario> encontrarUsuarioPorNombre(
             @RequestParam String username
     ) throws BadRequestException;
-    
+
+    /**
+     * Busca usuarios por rol.
+     *
+     * @param role rol del usuario
+     * @return lista de usuarios
+     */
     @RequestMapping(value = "/find-by-role",
             produces = {"application/json"},
             consumes = {"application/json"},
@@ -39,6 +58,13 @@ public interface UsuarioApi {
             @RequestParam String role
     );
 
+    /**
+     * Busca usuario por documento.
+     *
+     * @param numeroDocumento número de documento
+     * @return usuario encontrado
+     * @throws BadRequestException si documento inválido
+     */
     @RequestMapping(value = "/find-by-document",
             produces = {"application/json"},
             consumes = {"application/json"},

@@ -8,17 +8,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * Controlador REST principal del sistema de clínica.
  *
  * @author lmora
  */
 @RestController
 public class ClinicaApiController implements ClinicaApi {
+
+    /**
+     * Servicio principal de la clínica.
+     */
     @Autowired
     private ClinicaService clinicaService;
 
+    /**
+     * Servicio de prueba del sistema.
+     *
+     * @return estado del servicio
+     */
     @Override
-    public ResponseEntity<RespuestaRs> testService() {       
+    public ResponseEntity<RespuestaRs> testService() {
         return ResponseEntity.ok(this.clinicaService.test());
     }
-    
 }
