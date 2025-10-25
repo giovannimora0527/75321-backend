@@ -23,4 +23,9 @@ public class MedicamentoApiController implements MedicamentoApi {
     public List<MedicamentoRs> listar() {
         return medicamentoService.listar();
     }
+
+    @Override
+    public MedicamentoRs actualizar(Long id, CrearMedicamentoRq rq) {
+        return medicamentoService.actualizar(id,rq);
+    }
 }

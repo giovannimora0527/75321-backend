@@ -3,10 +3,7 @@ package com.uniminuto.clinica.api;
 import com.uniminuto.clinica.model.CrearMedicamentoRq;
 import com.uniminuto.clinica.model.MedicamentoRs;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -21,4 +18,9 @@ public interface MedicamentoApi {
     //Listar Medicamentos
     @GetMapping("/listar")
     List<MedicamentoRs>listar();
+
+    @PostMapping(path = "/actualizar/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    MedicamentoRs actualizar(@PathVariable Long id, @Valid @RequestBody CrearMedicamentoRq rq);
+
+
 }

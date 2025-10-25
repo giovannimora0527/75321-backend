@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,6 +74,56 @@ public class MedicamentoServiceImpl implements MedicamentoService {
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
+
+
+    @Override
+    @Transactional
+    public MedicamentoRs actualizar(Long id, CrearMedicamentoRq rq) {
+        Medicamento existente = medicamentoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "El medicamento con id " + id + " no existe"
+                ));
+
+        // Validaciones
+        if (rq.getNombre() == null || rq.getNombre().trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre es obligatorio");
+        }
+
+        if (rq.getPresentacion() == null || rq.getPresentacion().trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La presentación es obligatoria");
+        }
+
+        if (rq.getCantidad() == null || rq.getCantidad() <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La cantidad debe ser mayor que cero");
+        }
+
+        if (rq.getFechaVencimiento() == null || rq.getFechaVencimiento().isBefore(LocalDate.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La fecha de vencimiento no puede ser anterior a hoy");
+        }
+
+        // Evitar duplicados (nombre + presentación en otro medicamento)
+        boolean duplicado = medicamentoRepository
+                .findByNameIgnoreCaseAndPresentacionIgnoreCase(rq.getNombre().trim(), rq.getPresentacion().trim())
+                .map(m -> !m.getId().equals(id))
+                .orElse(false);
+
+        if (duplicado) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya existe otro medicamento con el mismo nombre y presentación");
+        }
+
+        // Actualizar datos
+        existente.setName(rq.getNombre().trim());
+        existente.setDescripcion(rq.getDescripcion());
+        existente.setPresentacion(rq.getPresentacion().trim());
+        existente.setCantidad(rq.getCantidad());
+        existente.setFechaVencimiento(rq.getFechaVencimiento());
+
+        // Guardar
+        Medicamento actualizado = medicamentoRepository.save(existente);
+
+        return toDto(actualizado);
+    }
+
     //Metodo Privado para mapear los campos
     private MedicamentoRs toDto(Medicamento medicamento) {
         return new MedicamentoRs(

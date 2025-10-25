@@ -11,4 +11,8 @@ public interface MedicamentoService {
 
     //listar si se traba revisar las Relaciones de Medicamento
     List<MedicamentoRs> listar();
+
+    //Actualizar con el id
+    MedicamentoRs actualizar(Long id, CrearMedicamentoRq rq);
+
 }
