@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,11 @@ public class MedicamentoServiceImpl implements MedicamentoService {
     @Override
     public List<Medicamento> listarMedicamentos() {
         List<Medicamento> lista = medicamentoRepository.findAll();
+
+        if (lista == null || lista.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         lista.sort(Comparator.comparing(Medicamento::getFechaCompra));
         return lista;
     }

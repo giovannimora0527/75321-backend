@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable() // Deshabilita CSRF si estás probando con Postman
                 .authorizeHttpRequests((requests) -> requests
-                .antMatchers("/**").permitAll() // Permitir todas las rutas
+                .requestMatchers("/**").permitAll()// Permitir todas las rutas
                 .anyRequest().authenticated()
                 )
                 .logout((logout) -> logout.permitAll());
