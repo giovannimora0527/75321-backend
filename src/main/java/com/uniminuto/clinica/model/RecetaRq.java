@@ -8,9 +8,10 @@ import lombok.Data;
  */
 @Data
 public class RecetaRq {
+    private Integer id;
     private Integer citaId;
     private Integer medicamentoId;
     private String dosis;
     private String indicaciones;
-    private LocalDateTime fechaCreacionRegistro; // Nuevo campo para fecha y hora de creación
+    private LocalDateTime fechaCreacionRegistro; 
 }

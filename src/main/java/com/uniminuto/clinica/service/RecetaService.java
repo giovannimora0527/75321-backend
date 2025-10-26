@@ -20,4 +20,8 @@ public interface RecetaService {
 
     RespuestaRs guardarReceta(RecetaRq recetaNueva)
             throws BadRequestException;
+
+    RespuestaRs actualizarReceta(RecetaRq recetaActualizar) 
+            throws BadRequestException;
+
 }
