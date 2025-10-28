@@ -65,6 +65,30 @@ public class RecetaServiceImpl implements RecetaService {
         return rta;
     }
 
+    @Override
+    public RespuestaRs actualizarReceta(RecetaRq recetaRq) throws BadRequestException {
+        Optional<Receta> optionalReceta = this.recetaRepository.findById(recetaRq.getId());
+        if (optionalReceta.isEmpty()) {
+            throw new BadRequestException("La receta no existe");
+        }
+
+        Receta recetaActualizar = optionalReceta.get();
+        Optional<Medicamento> optMedicamento = this.medicamentoRepository
+                .findById(recetaRq.getMedicamentoId());
+        if (optMedicamento.isEmpty()) {
+            throw new BadRequestException("El medicamento no existe");
+        }
+        recetaActualizar.setMedicamento(optMedicamento.get());
+        recetaActualizar.setIndicaciones(recetaRq.getIndicaciones());
+        recetaActualizar.setDosis(recetaRq.getDosis());
+        recetaActualizar.setFechaActualizacionRegistro(LocalDateTime.now());
+        this.recetaRepository.save(recetaActualizar);
+        RespuestaRs rta = new RespuestaRs();
+        rta.setMensaje("Receta actualizada exitosamente");
+        rta.setStatus(200);
+        return rta;
+    }
+
     private Receta converterCitaRqToCita(RecetaRq recetaRq, Cita cita, Medicamento medicamento) {
         Receta receta = new Receta();
         receta.setIndicaciones(recetaRq.getIndicaciones());

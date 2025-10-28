@@ -7,6 +7,9 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class RecetaRq {
+
+    private Long id;
+
     @NotNull(message = "La cita es obligatoria")
     private Long citaId;
 
