@@ -21,6 +21,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     boolean existsByUsername(String nombre);
 
+    //validar el email duplicado
+    boolean existsByEmail(String email);
+
+
 
 
 }

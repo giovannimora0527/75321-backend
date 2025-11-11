@@ -52,4 +52,9 @@ public class Receta implements Serializable {
     @Column(name="fecha_creacion_registro",nullable = false)
     @CreationTimestamp
     private LocalDateTime fechaCreacionRegistro;
+
+    @Column(name = "fecha_actualizacion_registro")
+    private LocalDateTime fechaActualizacionRegistro;
+
+
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,7 @@ public class RecetaServiceImpl implements RecetaService {
         r.setMedicamento(med);
         r.setDosis(rq.getDosis());
         r.setIndicaciones(rq.getIndicaciones());
+        r.setFechaActualizacionRegistro(null);
 
         r=recetaRepository.save(r);
 
@@ -85,6 +87,7 @@ public class RecetaServiceImpl implements RecetaService {
         receta.setMedicamento(medicamento);
         receta.setDosis(rq.getDosis());
         receta.setIndicaciones(rq.getIndicaciones());
+        receta.setFechaActualizacionRegistro(LocalDateTime.now());
         //guardamos campos
         recetaRepository.save(receta);
         //retornar la respuesta

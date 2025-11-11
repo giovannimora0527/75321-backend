@@ -16,6 +16,7 @@ public class UsuarioRs {
     private String rol;
     private LocalDateTime fechaCreacion;
     private Boolean activo;
+    private String email;
 
 }
 //luego pasar a Repository

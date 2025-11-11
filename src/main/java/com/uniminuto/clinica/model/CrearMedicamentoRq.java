@@ -17,6 +17,10 @@ public class CrearMedicamentoRq {
     @NotBlank(message = "La presentación es obligatoria")
     private String presentacion;
 
+    //Nuevo campo para enviar al frontend
+    @NotNull(message = "la fecha de compra es obligatoria")
+    private LocalDate fechaCompra;
+
     @NotNull(message = "La cantidad es obligatoria")
     @Min(value = 1, message = "La cantidad debe ser mayor que cero")
     private Integer cantidad;

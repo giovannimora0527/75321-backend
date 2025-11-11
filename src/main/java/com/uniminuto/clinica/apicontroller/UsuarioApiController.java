@@ -46,12 +46,14 @@ public class UsuarioApiController  implements UsuarioApi {
     }
 
     private UsuarioRs toRs(Usuario u) {
-        return new UsuarioRs(
-                u.getId(),
-                u.getUsername(),
-                u.getRol(),             // si es enum: u.getRol().name()
-                u.getFechaCreacion(),
-                u.isActivo()
-        );
+        UsuarioRs dto = new UsuarioRs();
+        dto.setId(u.getId());
+        dto.setUsername(u.getUsername());
+        dto.setRol(u.getRol());
+        dto.setFechaCreacion(u.getFechaCreacion());
+        dto.setActivo(u.isActivo());
+        dto.setEmail(u.getEmail()); // Nuevo mapeo
+
+        return dto;
     }
 }

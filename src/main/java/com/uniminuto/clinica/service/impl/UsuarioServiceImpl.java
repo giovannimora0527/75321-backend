@@ -73,6 +73,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         dto.setRol(usuario.getRol());
         dto.setFechaCreacion(usuario.getFechaCreacion());
         dto.setActivo(usuario.isActivo());
+        dto.setEmail(usuario.getEmail());
+
+
 
         return dto;
     }
@@ -87,6 +90,10 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .existsByUsername(UsuarioNuevo.getUsername().toLowerCase())){
             throw  new BadRequestException("El usuario ya existe.Intente de nuevo");
         }
+        if (usuarioRepository.existsByEmail(UsuarioNuevo.getEmail().toLowerCase().trim())) {
+            throw new BadRequestException("El email ya existe. Intente con otro.");
+        }
+
         //Si no existe creo el usuario y lo guardo
         Usuario nuevo=new Usuario();
         nuevo.setUsername(UsuarioNuevo.getUsername().toLowerCase());
@@ -94,6 +101,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         nuevo.setRol(UsuarioNuevo.getRol().toUpperCase());
         nuevo.setPasswordHash(this.convertirAHash(UsuarioNuevo.getPassword()));
         nuevo.setActivo(true);
+        //Validamos
+        nuevo.setEmail( UsuarioNuevo.getEmail().toLowerCase().trim() );
         //Guardar en la base de datos
         this.usuarioRepository.save(nuevo);
 

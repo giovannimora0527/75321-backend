@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 //Lo que va responder el backend
 @Data
@@ -17,4 +18,9 @@ public class MedicamentoRs {
     private Integer cantidad;
     private LocalDate fechaVencimiento;
     private String descripcion;
+
+    //nuevos campos
+    private LocalDate fechaCompra;
+    private LocalDateTime fechaCreacionRegistro;
+    private LocalDateTime fechaModificacionRegistro;
 }

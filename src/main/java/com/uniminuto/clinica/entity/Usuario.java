@@ -43,4 +43,8 @@ public class Usuario implements Serializable { //Searilizador
 
     @Column(name = "activo")
     private boolean activo;
+
+    @Column(name = "email", nullable = false, length = 255)
+    private String email;
+
 }

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,6 +62,11 @@ public class MedicamentoServiceImpl implements MedicamentoService {
         med.setPresentacion(rq.getPresentacion().trim());
         med.setCantidad(rq.getCantidad());
         med.setFechaVencimiento(rq.getFechaVencimiento());
+
+        //nuevos campos del Dto RS
+        med.setFechaCompra(LocalDate.now());
+        med.setFechaCreacionRegistro(LocalDateTime.now());
+        med.setFechaModificacionRegistro(null); //Se llenara automaticamnete
 
         med = medicamentoRepository.save(med);
         //Devolver la respuesta Mapeada
@@ -117,6 +123,7 @@ public class MedicamentoServiceImpl implements MedicamentoService {
         existente.setPresentacion(rq.getPresentacion().trim());
         existente.setCantidad(rq.getCantidad());
         existente.setFechaVencimiento(rq.getFechaVencimiento());
+        existente.setFechaModificacionRegistro(LocalDateTime.now());
 
         // Guardar
         Medicamento actualizado = medicamentoRepository.save(existente);
@@ -132,7 +139,10 @@ public class MedicamentoServiceImpl implements MedicamentoService {
                 medicamento.getPresentacion(),
                 medicamento.getCantidad(),
                 medicamento.getFechaVencimiento(),
-                medicamento.getDescripcion()
+                medicamento.getDescripcion(),
+                medicamento.getFechaCompra(),
+                medicamento.getFechaCreacionRegistro(),
+                medicamento.getFechaModificacionRegistro()
         );
     }
 
