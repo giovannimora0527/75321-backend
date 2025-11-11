@@ -31,26 +31,32 @@ public class CitaServiceImpl implements CitaService {
     @Override
     @Transactional
     public CitaRs crear(CrearCitaRq rq) {
-        //Validar el paciente y el medico
-        Paciente paciente=pacienteRepository.findById(rq.getPacienteId())
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Paciente no existe"));
+        // Validar el paciente y el médico
+        Paciente paciente = pacienteRepository.findById(rq.getPacienteId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paciente no existe"));
 
-        Medico medico=medicoRepository.findById(rq.getMedicoId())
-                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"El medico no existe"));
+        Medico medico = medicoRepository.findById(rq.getMedicoId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "El médico no existe"));
 
-        //Construir y guardar la cita
-        Cita c=new Cita();
+        // Validar conflicto de horario para el médico
+        boolean existeConflicto = citaRepository.existsByMedico_IdAndFechaHora(rq.getMedicoId(), rq.getFechaHora());
+        if (existeConflicto) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "El médico ya tiene una cita programada en ese horario");
+        }
+
+        // Construir y guardar la cita
+        Cita c = new Cita();
         c.setPaciente(paciente);
         c.setMedico(medico);
         c.setFechaHora(rq.getFechaHora());
         c.setEstado("PROGRAMADA");
         c.setMotivo(rq.getMotivo());
 
-        c=citaRepository.save(c);
+        c = citaRepository.save(c);
 
-
-        //DTO de respuesta
-        return new CitaRs (
+        // DTO de respuesta
+        return new CitaRs(
                 c.getId(),
                 paciente.getId(),
                 paciente.getNumeroDocumento(),
@@ -60,10 +66,7 @@ public class CitaServiceImpl implements CitaService {
                 c.getFechaHora(),
                 c.getEstado(),
                 c.getMotivo()
-
-
         );
-
     }
 
     @Override
