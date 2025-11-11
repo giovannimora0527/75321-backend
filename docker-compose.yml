@@ -1,7 +1,11 @@
-version: '3.8'
+version: "3.8"
+
 services:
+  # ==========================
+  # Base de datos MySQL
+  # ==========================
   db:
-    container_name: clinica_75_mysql
+    container_name: clinica_mysql
     image: mysql:8.0
     restart: always
     environment:
@@ -13,8 +17,44 @@ services:
       - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -uadmin -ppassword1 -h 127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ==========================
+  # Backend en modo desarrollo
+  # ==========================
+  backend:
+    container_name: clinica_backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: clinica-backend:dev
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/clinica_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: password1
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    volumes:
+      # Sincroniza tu código local con el contenedor
+      - ./src:/app/src
+      - ./pom.xml:/app/pom.xml
+      # Cache persistente de dependencias Maven (no se descarga todo cada vez)
+      - maven_repo:/root/.m2
+    command: mvn spring-boot:run
+    restart: always
 
 volumes:
   db_data:
+  maven_repo:
+
+
 
 
