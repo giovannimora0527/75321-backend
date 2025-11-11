@@ -8,7 +8,6 @@ import org.apache.coyote.BadRequestException;
 import java.util.List;
 
 public interface MedicamentoService {
-
     List<Medicamento> listarMedicamentos();
 
     RespuestaRs guardarMedicamento(MedicamentoRq medicamentoRq) throws BadRequestException;

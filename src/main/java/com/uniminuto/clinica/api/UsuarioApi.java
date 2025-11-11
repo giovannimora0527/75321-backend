@@ -12,52 +12,71 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.Valid;
+import javax.mail.MessagingException;
 
 /**
  *
  * @author lmora
  */
 @CrossOrigin(origins = "*")
-@RequestMapping("/users")
+@RequestMapping("/usuario")
 public interface UsuarioApi {
 
-    @RequestMapping(value = "/all",
+    @RequestMapping(value = "/listar",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<List<Usuario>> listarUsuarios();
-
-    @RequestMapping(value = "/find-username",
+    
+    
+    
+    @RequestMapping(value = "/listar-rol",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<Usuario> encontrarUsuarioPorNombre(
-            @RequestParam String username
+    ResponseEntity<List<Usuario>> listarUsuariosPorRol(
+       @RequestParam String rol
+    );
+    
+    
+    @RequestMapping(value = "/buscar-nombre",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<Usuario> buscarUsuarioPorNombre(
+       @RequestParam String nombre
     ) throws BadRequestException;
     
-    @RequestMapping(value = "/find-by-role",
+    
+    
+    @RequestMapping(value = "/buscar-estado",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<List<Usuario>> encontrarUsuariosPorRol(
-            @RequestParam String role
-    );
+    ResponseEntity<List<Usuario>> buscarUsuariosPorEstado(
+       @RequestParam Integer activo
+    ) throws BadRequestException;
+    
     
     @RequestMapping(value = "/guardar",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
     ResponseEntity<RespuestaRs> guardarUsuario(
-            @RequestBody UsuarioRq usuario
-    ) throws BadRequestException;
-    
-    
+       @RequestBody UsuarioRq usuarioNuevo
+    ) throws BadRequestException, MessagingException;
+
+    /**
+     * Actualizar usuario.
+     * @param usuario UsuarioRq de entrada.
+     * @return respuesta del servicio.
+     * @throws BadRequestException excepcion.
+     */
     @RequestMapping(value = "/actualizar",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity<RespuestaRs> actualizarUsuario(
-            @Valid @RequestBody UsuarioRq usuario
+    ResponseEntity<RespuestaRs> actualizarrUsuario(
+            @RequestBody UsuarioRq usuario
     ) throws BadRequestException;
 }

@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class ClinicaApiController implements ClinicaApi {
+
     @Autowired
     private ClinicaService clinicaService;
 
     @Override
-    public ResponseEntity<RespuestaRs> testService() {       
-        return ResponseEntity.ok(this.clinicaService.test());
+    public ResponseEntity<RespuestaRs> testService() {
+        return ResponseEntity.ok(clinicaService.testearApp());
     }
-    
+
 }

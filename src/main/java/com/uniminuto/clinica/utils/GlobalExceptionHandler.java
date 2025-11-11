@@ -1,4 +1,3 @@
-// Agrego el controlador de excepciones centralizado
 package com.uniminuto.clinica.utils;
 
 import org.springframework.http.HttpStatus;

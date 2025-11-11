@@ -17,16 +17,24 @@ import java.util.List;
 @RestController
 public class CitaApiController implements CitaApi {
 
+    /**
+     * Servicio de citas.
+     */
     @Autowired
     private CitaService citaService;
 
     @Override
     public ResponseEntity<List<Cita>> listarCitas() {
-        return ResponseEntity.ok(this.citaService.listarCitasOrdenadas());
+        return ResponseEntity.ok(this.citaService.listarCitas());
     }
 
     @Override
-    public ResponseEntity<RespuestaRs> guardarCitas(@RequestBody @Valid CitaRq citaRq) throws BadRequestException {
+    public ResponseEntity<RespuestaRs> guardarCita(@RequestBody @Valid CitaRq citaRq) throws BadRequestException {
         return ResponseEntity.ok(this.citaService.guardarCita(citaRq));
+    }
+
+    @Override
+    public ResponseEntity<List<Cita>> listarCitasPorPaciente(Integer pacienteIds) throws BadRequestException {
+        return ResponseEntity.ok(this.citaService.listarCitasporPaciente(pacienteIds));
     }
 }

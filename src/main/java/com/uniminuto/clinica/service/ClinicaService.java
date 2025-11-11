@@ -7,5 +7,6 @@ import com.uniminuto.clinica.model.RespuestaRs;
  * @author lmora
  */
 public interface ClinicaService {
-    RespuestaRs test();
+    
+    RespuestaRs testearApp();    
 }

@@ -4,6 +4,7 @@ import com.uniminuto.clinica.entity.Paciente;
 import com.uniminuto.clinica.repository.PacienteRepository;
 import com.uniminuto.clinica.service.PacienteService;
 import java.util.List;
+import java.util.Optional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,18 +20,26 @@ public class PacienteServiceImpl implements PacienteService {
     private PacienteRepository pacienteRepository;
 
     @Override
-    public List<Paciente> listarTodo() {
-        return pacienteRepository.findAll();
+    public List<Paciente> encontrarTodosLosPacientes() {
+        return this.pacienteRepository.findAll();
     }
 
     @Override
-    public List<Paciente> obtenerPacientePorDocumento(String numeroDocumento) throws BadRequestException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Paciente buscarPacientePorDocumento(String documento) throws BadRequestException {
+        Optional<Paciente> optPaciente = this.pacienteRepository.findByNumeroDocumento(documento);
+        if (!optPaciente.isPresent()) {
+            throw new BadRequestException("No se encuentra el paciente");
+        }
+        return optPaciente.get();
     }
 
     @Override
-    public List<Paciente> listarPacientesMayorAMenor() {
-        return this.pacienteRepository.findAllByOrderByFechaNacimientoAsc();
+    public List<Paciente> listarOrdenadoPorFechaNacimiento(boolean ascendente) {
+        if (ascendente) {
+            return this.pacienteRepository.findAllByOrderByFechaNacimientoAsc();
+        } else {
+            return this.pacienteRepository.findAllByOrderByFechaNacimientoDesc();
+        }
     }
 
 }

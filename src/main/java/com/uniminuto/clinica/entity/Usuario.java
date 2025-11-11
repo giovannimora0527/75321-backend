@@ -16,32 +16,35 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name = "usuario")
+@Table(name="usuario")
 public class Usuario implements Serializable {
-
+    
     /**
      * Id serializable.
      */
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
-
+    private Long id;
+    
     @Column(name = "username")
     private String username;
-
+    
     @Column(name = "password_hash")
     private String password;
-
+    
     @Column(name = "rol")
     private String rol;
-
+    
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
-
+    
     @Column(name = "activo")
     private boolean activo;
+
+    @Column(name = "email")
+    private String email;
     
 }

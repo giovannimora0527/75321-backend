@@ -28,8 +28,9 @@ public interface MedicamentoApi {
             consumes = {"application/json"},
             method = RequestMethod.POST)
     ResponseEntity<RespuestaRs> guardarMedicamento(
-       @RequestBody MedicamentoRq medicamentoRq
+            @RequestBody MedicamentoRq medicamentoRq
     ) throws BadRequestException;
+
 
     @RequestMapping(value = "/actualizar",
             produces = {"application/json"},

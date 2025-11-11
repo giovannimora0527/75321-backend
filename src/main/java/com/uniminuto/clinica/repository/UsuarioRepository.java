@@ -11,11 +11,10 @@ import org.springframework.stereotype.Repository;
  * @author lmora
  */
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
-    Optional<Usuario> findByUsername(String nombre);
-    
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     List<Usuario> findByRol(String rol);
     
-    boolean existsByUsername(String nombre);
-    
+    Optional<Usuario> findByUsername(String nombreUsuario);
+        
+    List<Usuario> findByActivo(boolean estado);
 }
