@@ -22,6 +22,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    networks:
+      - clinica_net
 
   # ==========================
   # Backend en modo desarrollo
@@ -40,20 +42,34 @@ services:
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: password1
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8080           # 👈 AGREGADO
+      SERVER_ADDRESS: 0.0.0.0     # 👈 AGREGADO
     ports:
       - "8080:8080"
     volumes:
-      # Sincroniza tu código local con el contenedor
       - ./src:/app/src
       - ./pom.xml:/app/pom.xml
-      # Cache persistente de dependencias Maven (no se descarga todo cada vez)
       - maven_repo:/root/.m2
-    command: mvn spring-boot:run
+    command: mvn spring-boot:run -Dserver.port=8080 -Dserver.address=0.0.0.0   # 👈 MODIFICADO
     restart: always
+    networks:
+      - clinica_net
 
+# ==========================
+# Volúmenes
+# ==========================
 volumes:
   db_data:
   maven_repo:
+
+# ==========================
+# Red externa
+# ==========================
+networks:
+  clinica_net:
+    external: true
+
+
 
 
 
