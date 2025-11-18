@@ -20,12 +20,12 @@ public class Auditoria {
     @Column(name = "session_id")
     private Integer sessionId;
 
-    /** Identificador del usuario asociado a la sesión */
-    @Column(name = "user_id", nullable = false)
+    // Este SÍ puede ser null (la tabla lo permite)
+    @Column(name = "user_id")
     private Integer userId;
 
-    /** Token JWT de la sesión */
-    @Column(name = "token", nullable = false, length = 500)
+    // También permite null
+    @Column(name = "token", length = 500)
     private String token;
 
     /** Fecha y hora de inicio de sesión */
@@ -35,4 +35,14 @@ public class Auditoria {
     /** Fecha y hora de expiración de la sesión */
     @Column(name = "fecha_expiracion")
     private LocalDateTime fechaExpiracion;
+
+    //Nuevos Campos
+    @Column(name = "fecha_evento",nullable = false)
+    private LocalDateTime fechaEvento;
+
+    @Column(name="username_ingresado",nullable = false,length = 100)
+    private String usernameIngresado;
+
+    @Column(name = "descripcion_error",nullable = false,length = 255)
+    private String descripcionError;
 }
