@@ -47,4 +47,14 @@ public class Usuario implements Serializable { //Searilizador
     @Column(name = "email", nullable = false, length = 255)
     private String email;
 
+    //Nuevos campos Requerimientgo2
+    @Column(name = "intentos_fallidos", nullable = false)
+    private Integer intentosFallidos=0;
+
+    @Column(name = "bloqueado_hasta")
+    private LocalDateTime bloqueadoHasta;
+
+    @Column(name = "ultima_ip", length = 50)
+    private String ultimaIp;
+
 }
