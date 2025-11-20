@@ -31,23 +31,25 @@ public class SecurityConfig {
      * @return Autorizado.
      * @throws Exception Excepcion.
      */
-    @Bean
-    public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
-        http
-                .cors() // Habilita CORS
-                .and()
-                .csrf().disable() // Deshabilita CSRF si estás probando con Postman
-                .authorizeHttpRequests((requests) -> requests
-                    // Permitir acceso sin autenticación solo a login y recuperar-contrasena
-                    .antMatchers("/auth/login", "/auth/recuperar-contrasena").permitAll()
-                    // El resto de endpoints requieren autenticación
-                    .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout((logout) -> logout.permitAll());
+   @Bean
+   public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
+       http
+               .cors()
+               .and()
+               .csrf().disable()
+               .authorizeHttpRequests((requests) -> requests
+                       .antMatchers(
+                               "/auth/login",
+                               "/auth/recuperar-contrasena",
+                               "/usuario/guardar" // <--- AQUÍ DEBE SER LA RUTA EXACTA
+                       ).permitAll()
+                       .anyRequest().authenticated()
+               )
+               .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+               .logout((logout) -> logout.permitAll());
 
-        return http.build();
-    }
+       return http.build();
+   }
 
     /**
      * Configuracion del cors.

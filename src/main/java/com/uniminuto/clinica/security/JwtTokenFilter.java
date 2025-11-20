@@ -46,10 +46,14 @@ public class JwtTokenFilter extends GenericFilterBean {
         LOG.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
 
         String requestURI = request.getRequestURI();
-        if (requestURI != null && (requestURI.contains("/auth/recuperar-contrasena")
-                || requestURI.contains("/auth/login"))) {
+        if (requestURI != null && (
+                requestURI.contains("/auth/recuperar-contrasena") ||
+                        requestURI.contains("/auth/login") ||
+                        requestURI.contains("/usuario/guardar") // <--- ¡NUEVO!
+        )) {
             try {
                 filterChain.doFilter(req, res);
+
             } catch (BadRequestException e) {
                 LOG.log(Level.WARNING, "Error en la petición: {0}", e.getMessage());
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
