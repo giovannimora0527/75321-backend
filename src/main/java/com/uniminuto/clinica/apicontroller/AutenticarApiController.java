@@ -7,32 +7,37 @@ import com.uniminuto.clinica.service.AutenticarService;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/auth") // Asegurar prefijo si no está en properties
 public class AutenticarApiController implements AutenticarApi {
 
     @Autowired
     private AutenticarService autenticarService;
 
+    // Inyectamos HttpServletRequest para poder capturar la IP del usuario (Requerimiento 2)
     @Autowired
     private HttpServletRequest httpRequest;
 
     @Override
-    @PostMapping("/login") // Verificar mapeo en AutenticarApi
-    public ResponseEntity<AutenticatorRs> autenticar(@RequestBody AuthenticatorRq request) throws BadRequestException {
+    public ResponseEntity<AutenticatorRs> autenticar(AuthenticatorRq request) throws BadRequestException {
+        // Pasamos solo el request, el servicio ya se encarga de la lógica
+        // Nota: Si modificaste autenticar() en el servicio para pedir IP, pásala aquí.
+        // Si no, déjalo como estaba. Asumiré la versión estándar:
         return ResponseEntity.ok(this.autenticarService.autenticar(request));
     }
 
-    // NUEVO ENDPOINT PARA RECUPERACIÓN
-    @PostMapping("/recuperar-contrasena")
-    public ResponseEntity<Void> recuperarContrasena(@RequestBody AuthenticatorRq request) {
-        String ip = httpRequest.getRemoteAddr();
-        // Solo necesitamos el username del request
-        autenticarService.recuperarContrasena(request.getUsername(), ip);
+    @Override
+    public ResponseEntity<Void> recuperarContrasena(AuthenticatorRq request) {
+        // Capturamos la IP desde donde se hace la petición
+        String ipAddress = httpRequest.getRemoteAddr();
+
+        // Llamamos al servicio pasando el usuario y la IP para la auditoría
+        this.autenticarService.recuperarContrasena(request.getUsername(), ipAddress);
+
+        // Retornamos 200 OK (Void)
         return ResponseEntity.ok().build();
     }
 }
