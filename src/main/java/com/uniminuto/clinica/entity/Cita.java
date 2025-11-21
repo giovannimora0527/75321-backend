@@ -7,44 +7,40 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
 
 /**
- *
- * @author lmora
+ * @author AORUS
  */
 @Data
 @Entity
-@Table(name = "usuario")
-public class Usuario implements Serializable {
-
-    /**
-     * Id serializable.
-     */
+@Table(name = "cita")
+public class Cita implements Serializable {
+    
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-
-    @Column(name = "username")
-    private String username;
-
-    @Column(name = "password_hash")
-    private String password;
-
-    @Column(name = "rol")
-    private String rol;
-
-    @Column(name = "fecha_creacion")
-    private LocalDateTime fechaCreacion;
     
-    @Column(name = "email", unique = true)
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "paciente_id")
+    private Paciente paciente;
 
-    @Column(name = "activo")
-    private boolean activo;
+    @ManyToOne
+    @JoinColumn(name = "medico_id")
+    private Medico medico;
     
+    @Column(name = "fecha_hora")
+    private LocalDateTime fechaHora;
+    
+    @Column(name = "estado")
+    private String estado;
+    
+    @Column(name = "motivo")
+    private String motivo;
 }

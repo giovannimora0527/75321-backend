@@ -1,6 +1,7 @@
 package com.uniminuto.clinica.api;
 
 import com.uniminuto.clinica.entity.Medico;
+import com.uniminuto.clinica.entity.Usuario;
 import java.util.List;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;

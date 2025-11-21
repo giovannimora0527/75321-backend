@@ -1,8 +1,8 @@
 package com.uniminuto.clinica.api;
 
-import com.uniminuto.clinica.entity.Paciente;
+import com.uniminuto.clinica.entity.Cita;
+import com.uniminuto.clinica.model.CitaRq;
 import com.uniminuto.clinica.model.RespuestaRs;
-import com.uniminuto.clinica.model.PacienteRq;
 import java.util.List;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
@@ -15,44 +15,51 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * @author AORUS
  */
-
 @CrossOrigin(origins = "*")
-@RequestMapping("/paciente")
-public interface PacienteApi {
+@RequestMapping("/cita")
+public interface CitaApi {
     
     @RequestMapping(value = "/all",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<List<Paciente>> listarPacientes();
-    
-    @RequestMapping(value = "/find-doc",
+    ResponseEntity<List<Cita>> listarCitas();
+
+    @RequestMapping(value = "/ordenadas_porHora",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<Paciente> encontrarPacientePorDocumento(
-            @RequestParam String numero_documento
-    ) throws BadRequestException;
+    ResponseEntity<List<Cita>> listarCitasPasadasOrdenadas();
     
-    @RequestMapping(value = "/all-by-FecNac",
+    @RequestMapping(value = "/by-paciente",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<List<Paciente>> listarPacientesOrdenadosPorFechaNacimiento();
+    ResponseEntity<List<Cita>> listarCitasPorPaciente(
+            @RequestParam Integer pacienteId
+    );
+    
+    @RequestMapping(value = "/by-medico",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<List<Cita>> listarCitasPorMedico(
+            @RequestParam Integer medicoId
+    );
+    
+    @RequestMapping(value = "/by-estado",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<List<Cita>> listarCitasPorEstado(
+            @RequestParam String estado
+    );
     
     @RequestMapping(value = "/guardar",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity<RespuestaRs> guardarPaciente(
-            @RequestBody PacienteRq paciente
-    ) throws BadRequestException;
-    
-    @RequestMapping(value = "/actualizar",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.POST)
-    ResponseEntity<RespuestaRs> actualizarPaciente(
-            @RequestBody PacienteRq paciente
+    ResponseEntity<RespuestaRs> guardarCita(
+            @RequestBody CitaRq cita
     ) throws BadRequestException;
 }

@@ -1,21 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package com.uniminuto.clinica.service;
 
 import com.uniminuto.clinica.entity.Paciente;
+import com.uniminuto.clinica.model.RespuestaRs;
+import com.uniminuto.clinica.model.PacienteRq;
 import java.util.List;
 import org.apache.coyote.BadRequestException;
-/**
- *
- * @author jorge
- */
-public interface PacienteService {
 
+/**
+ * @author AORUS
+ */
+
+public interface PacienteService {
     List<Paciente> listarTodo();
     
-    Paciente obtenerPacientesPorDocumento(String numeroDocumento)
-            throws BadRequestException;
-
+    Paciente buscarPacientePorDocumento(String documento) 
+        throws BadRequestException;
+    
+    List<Paciente> listarPacientesOrdenadosPorFechaNacimiento();
+    
+    RespuestaRs guardarPaciente(PacienteRq pacienteNuevo) 
+        throws BadRequestException;
+    
+    RespuestaRs actualizarPaciente(PacienteRq pacienteActualizar) 
+        throws BadRequestException;
 }

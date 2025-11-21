@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * @author lmora
  */
 @Repository
-public interface MedicoRepository extends JpaRepository<Medico, Long> {
+public interface MedicoRepository extends JpaRepository<Medico, Integer> {
     
     List<Medico> findByEspecializacion(Especializacion e);
     
