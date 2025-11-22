@@ -8,10 +8,11 @@ import com.uniminuto.clinica.repository.UsuarioRepository;
 import com.uniminuto.clinica.repository.PasswordResetTokenRepository;
 import com.uniminuto.clinica.service.UsuarioService;
 import com.uniminuto.clinica.service.EmailService;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * Implementación del servicio de usuarios
  * @author lmora
  */
 @Service
@@ -42,10 +43,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
     
     @Override
-    public Usuario buscarUsuarioPorNombre(String nombre)
-            throws BadRequestException {
-        Optional<Usuario> optUser = this.usuarioRepository
-                .findByUsername(nombre);
+    public Usuario buscarUsuarioPorNombre(String nombre) throws BadRequestException {
+        Optional<Usuario> optUser = this.usuarioRepository.findByUsername(nombre);
         if (!optUser.isPresent()) {
             throw new BadRequestException("No existe el usuario");
         }
@@ -53,42 +52,48 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Usuario> buscarPorRol(String role) {
         List<Usuario> listUsers = this.usuarioRepository.findByRol(role);
-        return !listUsers.isEmpty() ? listUsers : Collections.EMPTY_LIST;
+        // Corrección del warning: usar lista genérica correctamente
+        return !listUsers.isEmpty() ? listUsers : new ArrayList<>();
     }
 
     @Override
     public RespuestaRs guardarUsuario(UsuarioRq usuarioNuevo) throws BadRequestException {
-        // Paso 1. validar que los campos que ingresen esten obligatorios o vengan con datos
+        // Paso 1: validar que los campos obligatorios vengan con datos
         this.isCamposObligatorios(usuarioNuevo);
         
         // Paso 2: validar si el usuario existe por nombre
-        if (this.usuarioRepository
-                .existsByUsername(usuarioNuevo.getUsername().toLowerCase())) {
+        if (this.usuarioRepository.existsByUsername(usuarioNuevo.getUsername().toLowerCase())) {
             throw new BadRequestException("El usuario ya existe. Intente de nuevo.");
         }
         
-        // Si no existe lo creo y lo guardo.
+        // Si no existe, lo creo y lo guardo
         Usuario nuevo = new Usuario();
-        nuevo.setUsername(usuarioNuevo.getUsername()
-                .toLowerCase());
+        nuevo.setUsername(usuarioNuevo.getUsername().toLowerCase());
         nuevo.setFechaCreacion(LocalDateTime.now());
         nuevo.setRol(usuarioNuevo.getRol().toUpperCase());
         nuevo.setPassword(this.convertirAHash(usuarioNuevo.getPassword()));
         nuevo.setActivo(true);
+        
+        // Inicializar campos de auditoría y bloqueo
+        nuevo.setIntentosFallidos(0);
+        nuevo.setBloqueado(false);
+        nuevo.setRequiereCambioPassword(false);
+        
         this.usuarioRepository.save(nuevo);
         
-        // Devuelvo una respuesta que el usuario fue guardado
+        // Devolver respuesta exitosa
         RespuestaRs respuesta = new RespuestaRs();
         respuesta.setStatus(200);
-        respuesta.setMensaje("El usuario se ha guardado con exito.");
+        respuesta.setMensaje("El usuario se ha guardado con éxito.");
         return respuesta;
     }
     
     @Override
     public RespuestaRs actualizarUsuario(UsuarioRq usuario) throws BadRequestException {
-        // TODO - Hacer la implementacion de actualizar un usuario existente.
+        // Implementación de actualizar un usuario existente
         Optional<Usuario> optUser = this.usuarioRepository.findById(usuario.getId());
         if (optUser.isEmpty()) {
             throw new BadRequestException("El usuario no existe. No se puede actualizar");
@@ -96,8 +101,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         
         Usuario userActual = optUser.get();
         
+        // Validar si el username cambió y si ya existe
         if (!userActual.getUsername().equals(usuario.getUsername())) {
-            // Consulto si existe un usuario por username
             Optional<Usuario> optUserByName = this.usuarioRepository
                     .findByUsername(usuario.getUsername());
             if (optUserByName.isPresent()) {
@@ -113,25 +118,34 @@ public class UsuarioServiceImpl implements UsuarioService {
         
         RespuestaRs rta = new RespuestaRs();
         rta.setStatus(200);
-        rta.setMensaje("Se ha actualizado el usuario con exito.");
+        rta.setMensaje("Se ha actualizado el usuario con éxito.");
         return rta;
     }
     
     // ============================================
-    // NUEVOS MÉTODOS PARA RECUPERACIÓN DE CONTRASEÑA
+    // MÉTODOS PARA RECUPERACIÓN DE CONTRASEÑA
     // ============================================
     
-     @Override
+    @Override
     public String generarTokenRecuperacion(String email) throws BadRequestException {
         Usuario usuario = buscarPorEmail(email);
         String token = UUID.randomUUID().toString();
         LocalDateTime fechaExpiracion = LocalDateTime.now().plusHours(24);
+        
         PasswordResetToken resetToken = new PasswordResetToken(token, usuario, fechaExpiracion);
         passwordResetTokenRepository.save(resetToken);
 
-        System.out.println("Llamando a emailService.sendPasswordResetEmail...");
-        emailService.sendPasswordResetEmail(email, token);
-        System.out.println("Email service ejecutado");
+        System.out.println("🔄 Generando token de recuperación para: " + email);
+        
+        try {
+            // CORREGIDO: Usar el método correcto del EmailService
+            emailService.enviarEmailRecuperacion(email, token);
+            System.out.println("✅ Email de recuperación enviado exitosamente");
+        } catch (Exception e) {
+            System.err.println("❌ Error al enviar email: " + e.getMessage());
+            e.printStackTrace();
+            throw new BadRequestException("Error al enviar el email de recuperación");
+        }
         
         return token;
     }
@@ -156,10 +170,18 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuario = resetToken.getUsuario();
         String passwordHasheada = convertirAHash(newPassword);
         usuario.setPassword(passwordHasheada);
+        
+        // Limpiar campos de bloqueo al resetear contraseña
+        usuario.setIntentosFallidos(0);
+        usuario.setBloqueado(false);
+        usuario.setFechaBloqueo(null);
+        
         usuarioRepository.save(usuario);
 
         resetToken.setUtilizado(true);
         passwordResetTokenRepository.save(resetToken);
+
+        System.out.println("✅ Contraseña actualizada para usuario: " + usuario.getUsername());
 
         RespuestaRs respuesta = new RespuestaRs();
         respuesta.setStatus(200);
@@ -176,6 +198,13 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioOpt.get();
     }
 
+    // ============================================
+    // MÉTODOS PRIVADOS
+    // ============================================
+
+    /**
+     * Convierte texto a hash MD5
+     */
     private String convertirAHash(String textoAConvertir) {
         String algoritmo = "MD5";
         try {
@@ -191,14 +220,23 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
     }
 
+    /**
+     * Valida que los campos obligatorios no estén vacíos
+     */
     private void isCamposObligatorios(UsuarioRq usuarioNuevo) throws BadRequestException {
-        if (usuarioNuevo.getUsername() == null || usuarioNuevo.getUsername().isBlank() || usuarioNuevo.getUsername().isEmpty()) {
+        if (usuarioNuevo.getUsername() == null || 
+            usuarioNuevo.getUsername().isBlank() || 
+            usuarioNuevo.getUsername().isEmpty()) {
             throw new BadRequestException("El campo username es obligatorio");
         }
-        if (usuarioNuevo.getPassword() == null || usuarioNuevo.getPassword().isBlank() || usuarioNuevo.getPassword().isEmpty()) {
+        if (usuarioNuevo.getPassword() == null || 
+            usuarioNuevo.getPassword().isBlank() || 
+            usuarioNuevo.getPassword().isEmpty()) {
             throw new BadRequestException("El campo password es obligatorio");
         }
-        if (usuarioNuevo.getRol() == null || usuarioNuevo.getRol().isBlank() || usuarioNuevo.getRol().isEmpty()) {
+        if (usuarioNuevo.getRol() == null || 
+            usuarioNuevo.getRol().isBlank() || 
+            usuarioNuevo.getRol().isEmpty()) {
             throw new BadRequestException("El campo rol es obligatorio");
         }
     }
