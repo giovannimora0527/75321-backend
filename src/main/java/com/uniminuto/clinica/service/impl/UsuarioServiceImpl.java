@@ -7,6 +7,7 @@ import com.uniminuto.clinica.model.UsuarioRq;
 import com.uniminuto.clinica.repository.UsuarioRepository;
 import com.uniminuto.clinica.repository.PasswordResetTokenRepository;
 import com.uniminuto.clinica.service.UsuarioService;
+import com.uniminuto.clinica.service.EmailService;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
@@ -31,6 +32,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public List<Usuario> listarTodosLosUsuarios() {
@@ -124,6 +128,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         LocalDateTime fechaExpiracion = LocalDateTime.now().plusHours(24);
         PasswordResetToken resetToken = new PasswordResetToken(token, usuario, fechaExpiracion);
         passwordResetTokenRepository.save(resetToken);
+
+        System.out.println("Llamando a emailService.sendPasswordResetEmail...");
+        emailService.sendPasswordResetEmail(email, token);
+        System.out.println("Email service ejecutado");
+        
         return token;
     }
 
