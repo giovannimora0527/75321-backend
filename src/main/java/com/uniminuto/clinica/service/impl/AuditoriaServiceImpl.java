@@ -6,6 +6,7 @@ import com.uniminuto.clinica.repository.AuditoriaRepository;
 import com.uniminuto.clinica.service.AuditoriaService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -106,6 +107,32 @@ public class AuditoriaServiceImpl implements AuditoriaService {
                     return rs;
                 })
                 .toList();
+    }
+
+    @Override
+    public Page<AuditoriaRs> filtrarPage(String username, String tipo, String desde, String hasta, int page, int size) {
+        //Reutilizamos la logica
+        List<AuditoriaRs> filtrados = filtrar(username, tipo, desde, hasta);
+
+        // 2. Calculamos índices de la página
+        int fromIndex = page * size;
+        if (fromIndex >= filtrados.size()) {
+            // Página vacía
+            return new PageImpl<>(
+                    List.of(),
+                    PageRequest.of(page, size),
+                    filtrados.size()
+            );
+        }
+        int toIndex = Math.min(fromIndex + size, filtrados.size());
+        List<AuditoriaRs> contenidoPagina = filtrados.subList(fromIndex, toIndex);
+        //c
+        return new PageImpl<>(
+                contenidoPagina,
+                PageRequest.of(page, size),
+                filtrados.size()
+
+        );
     }
 
 

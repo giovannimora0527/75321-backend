@@ -18,5 +18,15 @@ public interface AuditoriaService {
     //Firma del servicio de Auditoria +Angular
    List<AuditoriaRs>filtrar(String username,String tipo,String desde, String hasta);
 
+   //Agregar paginacion
+    Page<AuditoriaRs>filtrarPage(
+            String username,
+            String tipo,
+            String desde,
+            String hasta,
+            int page,
+            int size
+    );
+
 
 }
