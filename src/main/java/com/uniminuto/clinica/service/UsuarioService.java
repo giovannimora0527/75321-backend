@@ -23,4 +23,10 @@ public interface UsuarioService {
             
     RespuestaRs actualizarUsuario(UsuarioRq usuario)
             throws BadRequestException;
+    // NUEVOS MÉTODOS PARA RECUPERACIÓN DE CONTRASEÑA
+    String generarTokenRecuperacion(String email) throws BadRequestException;
+    
+    RespuestaRs validarYResetearContrasena(String token, String newPassword) throws BadRequestException;
+    
+    Usuario buscarPorEmail(String email) throws BadRequestException;
 }

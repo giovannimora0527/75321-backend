@@ -41,6 +41,9 @@ public class Usuario implements Serializable {
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
+    @Column(name = "email", unique = true)
+    private String email;
+
     @Column(name = "activo")
     private boolean activo;
     
