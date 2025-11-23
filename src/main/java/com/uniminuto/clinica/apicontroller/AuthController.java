@@ -21,7 +21,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 
+/**
+ * Controlador de autenticación con sistema de auditoría
+ * Implementa AuthApi para mantener compatibilidad con rutas existentes
+ */
 @RestController
+@RequestMapping("/auth")  
 public class AuthController implements AuthApi {
 
     @Autowired
@@ -34,7 +39,7 @@ public class AuthController implements AuthApi {
     private AuditoriaService auditoriaService;
 
     /**
-     * Convierte texto a hash MD5 (método existente)
+     * Convierte texto a hash MD5 
      */
     private String convertirAHashString(String textoAConvertir) {
         String algoritmo = "MD5";
@@ -53,11 +58,14 @@ public class AuthController implements AuthApi {
 
     /**
      * LOGIN - Integrado con auditoría y bloqueo temporal
+     * Implementa el método de AuthApi
      */
     @Override
     public ResponseEntity<Map<String, Object>> login(UsuarioRq loginRq) {
         Map<String, Object> response = new HashMap<>();
         String username = loginRq.getUsername().toLowerCase();
+        
+        System.out.println("Intento de login para usuario: " + username);
         
         try {
             // 1. VERIFICAR SI EL USUARIO ESTÁ BLOQUEADO
@@ -66,6 +74,8 @@ public class AuthController implements AuthApi {
                 
                 auditoriaService.registrarLoginFallido(username, 
                     "Intento de login en cuenta bloqueada (quedan " + minutosRestantes + " minutos)");
+                
+                System.out.println("Usuario bloqueado: " + username + " - " + minutosRestantes + " minutos restantes");
                 
                 response.put("status", 403);
                 response.put("error", "Tu cuenta está bloqueada por seguridad. " +
@@ -84,6 +94,8 @@ public class AuthController implements AuthApi {
                 // Usuario no existe
                 auditoriaService.registrarLoginFallido(username, "Usuario no existe en el sistema");
                 
+                System.out.println("Usuario no encontrado: " + username);
+                
                 response.put("status", 401);
                 response.put("error", "Usuario o contraseña incorrectos");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -97,17 +109,21 @@ public class AuthController implements AuthApi {
             // Verificar contraseña normal
             if (usuario.getPassword().equals(passwordHasheada) && usuario.isActivo()) {
                 passwordCorrecta = true;
+                System.out.println("Contraseña MD5 correcta");
             }
             // Si falla, verificar contraseña temporal
             else if (auditoriaService.validarPasswordTemporal(usuario, loginRq.getPassword())) {
                 passwordCorrecta = true;
                 usandoPasswordTemporal = true;
+                System.out.println("Contraseña temporal válida");
             }
             
             // 4. PROCESAR RESULTADO
             if (passwordCorrecta) {
                 // LOGIN EXITOSO - Reiniciar contador de intentos
                 auditoriaService.reiniciarIntentosUsuario(username);
+                
+                System.out.println("Login exitoso para: " + username);
                 
                 response.put("status", 200);
                 response.put("mensaje", "Login exitoso");
@@ -127,6 +143,8 @@ public class AuthController implements AuthApi {
                 if (auditoriaService.usuarioEstaBloqueado(username)) {
                     long minutosRestantes = auditoriaService.obtenerTiempoBloqueoRestante(username);
                     
+                    System.out.println("Usuario bloqueado después de múltiples intentos: " + username);
+                    
                     response.put("status", 403);
                     response.put("error", "Has superado el límite de intentos. " +
                                          "Tu cuenta está bloqueada por " + minutosRestantes + " minutos.");
@@ -142,6 +160,8 @@ public class AuthController implements AuthApi {
                         intentosRestantes = 3 - usuarioActual.getIntentosFallidos();
                     }
                     
+                    System.out.println("Contraseña incorrecta. Intentos restantes: " + intentosRestantes);
+                    
                     response.put("status", 401);
                     response.put("error", "Usuario o contraseña incorrectos");
                     response.put("intentosRestantes", intentosRestantes);
@@ -154,15 +174,18 @@ public class AuthController implements AuthApi {
             auditoriaService.registrarLoginFallido(username, 
                 "Error en autenticación: " + e.getMessage());
             
+            System.err.println("Error en login: " + e.getMessage());
+            e.printStackTrace();
+            
             response.put("status", 500);
             response.put("error", "Error interno del servidor");
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
     /**
      * FORGOT PASSWORD - Método existente mantenido
+     * Implementa el método de AuthApi
      */
     @Override
     public ResponseEntity<?> forgotPassword(ForgotPasswordRq request) {
@@ -187,6 +210,7 @@ public class AuthController implements AuthApi {
 
     /**
      * RESET PASSWORD - Método existente mantenido
+     * Implementa el método de AuthApi
      */
     @Override
     public ResponseEntity<?> resetPassword(ResetPasswordRq request) {
@@ -238,14 +262,19 @@ public class AuthController implements AuthApi {
         }
     }
     
+    // NUEVOS ENDPOINTS DE AUDITORÍA
+
     /**
-     * NUEVO ENDPOINT - Solicitar contraseña temporal
+     * Solicitar contraseña temporal
+     * Endpoint: POST /auth/solicitar-password-temporal
      */
     @PostMapping("/solicitar-password-temporal")
     public ResponseEntity<?> solicitarPasswordTemporal(@RequestBody Map<String, String> request) {
         Map<String, Object> response = new HashMap<>();
         try {
             String username = request.get("username");
+            
+            System.out.println("Solicitud de password temporal para: " + username);
             
             if (username == null || username.trim().isEmpty()) {
                 response.put("exitoso", false);
@@ -283,7 +312,8 @@ public class AuthController implements AuthApi {
     }
     
     /**
-     * NUEVO ENDPOINT - Cambiar contraseña después de usar contraseña temporal
+     * Cambiar contraseña después de usar contraseña temporal
+     * Endpoint: POST /auth/cambiar-password
      */
     @PostMapping("/cambiar-password")
     public ResponseEntity<?> cambiarPassword(@RequestBody CambiarPasswordRequest request) {
@@ -291,6 +321,8 @@ public class AuthController implements AuthApi {
         try {
             String username = request.getUsername().toLowerCase();
             String nuevaPassword = request.getNuevaPassword();
+            
+            System.out.println("Cambio de contraseña para: " + username);
             
             Usuario usuario = usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -308,6 +340,8 @@ public class AuthController implements AuthApi {
             
             usuarioRepository.save(usuario);
             
+            System.out.println("Contraseña cambiada exitosamente para: " + username);
+            
             response.put("exitoso", true);
             response.put("mensaje", "Contraseña actualizada exitosamente");
             return ResponseEntity.ok(response);
@@ -321,7 +355,8 @@ public class AuthController implements AuthApi {
     }
     
     /**
-     * NUEVO ENDPOINT - Obtener información de bloqueo del usuario
+     * Obtener información de bloqueo del usuario
+     * Endpoint: GET /auth/info-bloqueo/{username}
      */
     @GetMapping("/info-bloqueo/{username}")
     public ResponseEntity<?> obtenerInfoBloqueo(@PathVariable String username) {
@@ -354,12 +389,15 @@ public class AuthController implements AuthApi {
     }
     
     /**
-     * NUEVO ENDPOINT - Desbloquear manualmente un usuario (admin)
+     * Desbloquear manualmente un usuario (admin)
+     * Endpoint: POST /auth/desbloquear/{username}
      */
     @PostMapping("/desbloquear/{username}")
     public ResponseEntity<?> desbloquearUsuario(@PathVariable String username) {
         Map<String, Object> response = new HashMap<>();
         try {
+            System.out.println("Desbloqueando usuario: " + username);
+            
             auditoriaService.desbloquearUsuario(username.toLowerCase());
             
             response.put("exitoso", true);
@@ -373,7 +411,11 @@ public class AuthController implements AuthApi {
         }
     }
     
-    // DTO para cambiar contraseña
+    // DTO
+    
+    /**
+     * DTO para el cambio de contraseña
+     */
     public static class CambiarPasswordRequest {
         private String username;
         private String nuevaPassword;

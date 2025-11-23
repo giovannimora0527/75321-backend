@@ -62,7 +62,7 @@ public class AuditoriaService {
         Auditoria auditoria = new Auditoria(nombreUsuario, descripcionError, direccionIp);
         auditoriaRepository.save(auditoria);
         
-        log.warn("🔴 Login fallido registrado - Usuario: {}, IP: {}, Error: {}", 
+        log.warn("Login fallido registrado - Usuario: {}, IP: {}, Error: {}", 
                  nombreUsuario, direccionIp, descripcionError);
         
         // Incrementar contador de intentos fallidos del usuario
@@ -86,7 +86,7 @@ public class AuditoriaService {
                 usuario.setBloqueado(true);
                 usuario.setFechaBloqueo(LocalDateTime.now());
                 
-                log.error("🚫 Usuario {} BLOQUEADO por {} intentos fallidos consecutivos", 
+                log.error("Usuario {} BLOQUEADO por {} intentos fallidos consecutivos", 
                          nombreUsuario, intentosMaximos);
             }
             
@@ -133,7 +133,7 @@ public class AuditoriaService {
             usuario.setFechaBloqueo(null);
             usuarioRepository.save(usuario);
             
-            log.info("✅ Usuario {} desbloqueado automáticamente", nombreUsuario);
+            log.info("Usuario {} desbloqueado automáticamente", nombreUsuario);
         });
     }
     
@@ -172,7 +172,7 @@ public class AuditoriaService {
         
         emailService.enviarPasswordTemporal(usuario.getEmail(), nombreUsuario, passwordTemporal);
         
-        log.info("📧 Contraseña temporal generada y enviada a {} ({})", 
+        log.info("Contraseña temporal generada y enviada a {} ({})", 
                  nombreUsuario, usuario.getEmail());
         
         return passwordTemporal;
@@ -187,7 +187,7 @@ public class AuditoriaService {
         }
         
         if (LocalDateTime.now().isAfter(usuario.getFechaExpiracionTemporal())) {
-            log.warn("⏰ Contraseña temporal expirada para usuario: {}", usuario.getUsername());
+            log.warn("Contraseña temporal expirada para usuario: {}", usuario.getUsername());
             return false;
         }
         

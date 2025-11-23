@@ -135,14 +135,14 @@ public class UsuarioServiceImpl implements UsuarioService {
         PasswordResetToken resetToken = new PasswordResetToken(token, usuario, fechaExpiracion);
         passwordResetTokenRepository.save(resetToken);
 
-        System.out.println("🔄 Generando token de recuperación para: " + email);
+        System.out.println("Generando token de recuperación para: " + email);
         
         try {
             // CORREGIDO: Usar el método correcto del EmailService
             emailService.enviarEmailRecuperacion(email, token);
-            System.out.println("✅ Email de recuperación enviado exitosamente");
+            System.out.println("Email de recuperación enviado exitosamente");
         } catch (Exception e) {
-            System.err.println("❌ Error al enviar email: " + e.getMessage());
+            System.err.println("Error al enviar email: " + e.getMessage());
             e.printStackTrace();
             throw new BadRequestException("Error al enviar el email de recuperación");
         }
@@ -198,9 +198,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioOpt.get();
     }
 
-    // ============================================
     // MÉTODOS PRIVADOS
-    // ============================================
 
     /**
      * Convierte texto a hash MD5

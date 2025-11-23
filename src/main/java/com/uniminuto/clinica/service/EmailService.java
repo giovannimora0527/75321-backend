@@ -30,7 +30,7 @@ public class EmailService {
         
         helper.setFrom(emailFrom);
         helper.setTo(destinatario);
-        helper.setSubject("🔐 Recuperación de Contraseña - Sistema Clínica UNIMINUTO");
+        helper.setSubject("Recuperación de Contraseña - Sistema Clínica UNIMINUTO");
         
         String resetUrl = frontendUrl + "/reset-password?token=" + token;
         
@@ -67,7 +67,7 @@ public class EmailService {
             "<body>" +
             "    <div class='container'>" +
             "        <div class='header'>" +
-            "            <h1>🏥 Sistema Clínica UNIMINUTO</h1>" +
+            "            <h1> Sistema Clínica UNIMINUTO</h1>" +
             "        </div>" +
             "        <div class='content'>" +
             "            <h2>Recuperación de Contraseña</h2>" +
@@ -79,7 +79,7 @@ public class EmailService {
             "            <p><strong>Opción 2:</strong> Copia y pega este enlace en tu navegador:</p>" +
             "            <div class='token-box'>" + resetUrl + "</div>" +
             "            " +
-            "            <p class='warning'>⚠️ IMPORTANTE:</p>" +
+            "            <p class='warning'> IMPORTANTE:</p>" +
             "            <ul>" +
             "                <li>Este enlace <strong>expira en 24 horas</strong></li>" +
             "                <li>Si no solicitaste este cambio, ignora este correo</li>" +
@@ -97,7 +97,7 @@ public class EmailService {
         helper.setText(contenidoHtml, true);
         mailSender.send(mensaje);
         
-        System.out.println("📧 Email de recuperación enviado a: " + destinatario);
+        System.out.println("Email de recuperación enviado a: " + destinatario);
     }
     
     /**
@@ -111,7 +111,7 @@ public class EmailService {
         
         helper.setFrom(emailFrom);
         helper.setTo(destinatario);
-        helper.setSubject("🔐 Contraseña Temporal - Sistema Clínica UNIMINUTO");
+        helper.setSubject("Contraseña Temporal - Sistema Clínica UNIMINUTO");
         
         String contenidoHtml = "<!DOCTYPE html>" +
             "<html>" +
@@ -139,17 +139,17 @@ public class EmailService {
             "<body>" +
             "    <div class='container'>" +
             "        <div class='header'>" +
-            "            <h1>🏥 Sistema Clínica UNIMINUTO</h1>" +
+            "            <h1> Sistema Clínica UNIMINUTO</h1>" +
             "        </div>" +
             "        <div class='content'>" +
             "            <h2>Hola, " + nombreUsuario + "</h2>" +
             "            <p>Se ha generado una <strong>contraseña temporal</strong> para tu cuenta.</p>" +
             "            " +
             "            <div class='password-box'>" +
-            "                🔑 " + passwordTemporal +
+            "                 " + passwordTemporal +
             "            </div>" +
             "            " +
-            "            <p class='warning'>⚠️ IMPORTANTE:</p>" +
+            "            <p class='warning'> IMPORTANTE:</p>" +
             "            <ul>" +
             "                <li>Esta contraseña es temporal y <strong>expira en 24 horas</strong></li>" +
             "                <li>Deberás cambiarla en tu primer inicio de sesión</li>" +
@@ -174,7 +174,7 @@ public class EmailService {
         helper.setText(contenidoHtml, true);
         mailSender.send(mensaje);
         
-        System.out.println("📧 Contraseña temporal enviada a: " + destinatario);
+        System.out.println("Contraseña temporal enviada a: " + destinatario);
     }
     
     /**
@@ -193,7 +193,7 @@ public class EmailService {
         
         mailSender.send(mensaje);
         
-        System.out.println("📧 Email enviado a: " + destinatario);
+        System.out.println("Email enviado a: " + destinatario);
     }
     
     /**
