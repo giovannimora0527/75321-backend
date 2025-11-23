@@ -1,27 +1,33 @@
 package com.uniminuto.clinica.service;
 
 import com.uniminuto.clinica.entity.Cita;
+import com.uniminuto.clinica.model.CitaRq;
+import com.uniminuto.clinica.model.RespuestaRs;
+import org.apache.coyote.BadRequestException;
+
 import java.util.List;
 
-/**
- * Servicio para la lógica de negocio de citas médicas.
- *
- * @author lmora
- */
 public interface CitaService {
 
     /**
-     * Guarda una nueva cita en el sistema.
-     *
-     * @param cita datos de la cita a guardar
-     * @return cita guardada
+     * lista las citas del sistema.
+     * @return lista de citas.
      */
-    Cita guardarCita(Cita cita);
+    List<Cita> listarCitas();
 
     /**
-     * Lista todas las citas ordenadas.
-     *
-     * @return lista de citas ordenadas
+     * Guarda una nueva cita en el sistema.
+     * @param citaRq Cita a guardar.
+     * @return Respuesta del servicio.
+     * @throws BadRequestException excepcion.
      */
-    List<Cita> listarCitasOrdenadas();
+    RespuestaRs guardarCita(CitaRq citaRq) throws BadRequestException;
+
+    /**
+     * Lista las citas por paciente.
+     * @param pacienteId ID del paciente.
+     * @return Lista de citas del paciente.
+     * @throws BadRequestException excepcion.
+     */
+    List<Cita> listarCitasporPaciente(Integer pacienteId) throws BadRequestException;
 }

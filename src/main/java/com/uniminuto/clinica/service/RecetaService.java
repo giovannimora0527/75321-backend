@@ -1,39 +1,32 @@
 package com.uniminuto.clinica.service;
 
 import com.uniminuto.clinica.entity.Receta;
+import com.uniminuto.clinica.model.RecetaRq;
+import com.uniminuto.clinica.model.RespuestaRs;
+import org.apache.coyote.BadRequestException;
+
 import java.util.List;
 
-/**
- * Servicio para la lógica de negocio de recetas médicas.
- *
- * @author lmora
- */
 public interface RecetaService {
+    /**
+     * Lista las recetas medicas del sistema.
+     * @return Listado de recetas medicas.
+     */
+    List<Receta> listarRecetas();
 
     /**
-     * Guarda una nueva receta en el sistema.
-     *
-     * @param receta datos de la receta a guardar
-     * @return receta guardada
+     * Guarda una nueva receta médica en el sistema.
+     * @param recetaRq receta a guardar.
+     * @return Respuesta del proceso.
+     * @throws BadRequestException excepcion del sistema.
      */
-    Receta guardarReceta(Receta receta);
+    RespuestaRs guardarReceta(RecetaRq recetaRq) throws BadRequestException;
 
     /**
-     * Lista todas las recetas ordenadas.
-     *
-     * @return lista de recetas ordenadas
+     * Actualiza una receta médica existente en el sistema.
+     * @param recetaRq receta a actualizar.
+     * @return Respuesta del proceso.
+     * @throws BadRequestException excepcion del sistema.
      */
-    List<Receta> listarRecetasOrdenadas();
-
-    /**
-     * Lista recetas por ID de cita médica.
-     *
-     * @param citaId ID de la cita
-     * @return lista de recetas de la cita
-     */
-    List<Receta> listarRecetasPorCita(Long citaId);
-
-    Receta actualizarReceta(Long id, Receta receta);
-
-
+    RespuestaRs actualizarReceta(RecetaRq recetaRq) throws BadRequestException;
 }

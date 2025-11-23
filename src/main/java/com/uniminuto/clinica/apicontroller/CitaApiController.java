@@ -1,44 +1,40 @@
 package com.uniminuto.clinica.apicontroller;
 
+import com.uniminuto.clinica.api.CitaApi;
 import com.uniminuto.clinica.entity.Cita;
+import com.uniminuto.clinica.model.CitaRq;
+import com.uniminuto.clinica.model.RespuestaRs;
 import com.uniminuto.clinica.service.CitaService;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 import java.util.List;
 
-/**
- * Controlador REST para gestión de citas médicas.
- *
- * @author lmora
- */
 @RestController
-@RequestMapping("/citas")
-public class CitaApiController {
+public class CitaApiController implements CitaApi {
 
     /**
-     * Servicio para operaciones de citas.
+     * Servicio de citas.
      */
     @Autowired
     private CitaService citaService;
 
-    /**
-     * Crea una nueva cita médica.
-     *
-     * @param cita datos de la cita a crear
-     * @return cita creada
-     */
-    @PostMapping
-    public Cita crearCita(@RequestBody Cita cita) {
-        return citaService.guardarCita(cita);
+    @Override
+    public ResponseEntity<List<Cita>> listarCitas() {
+        return ResponseEntity.ok(this.citaService.listarCitas());
     }
 
-    /**
-     * Lista todas las citas ordenadas.
-     *
-     * @return lista de citas ordenadas
-     */
-    @GetMapping("/ordenadas")
-    public List<Cita> listarCitasOrdenadas() {
-        return citaService.listarCitasOrdenadas();
+    @Override
+    public ResponseEntity<RespuestaRs> guardarCita(@RequestBody @Valid CitaRq citaRq) throws BadRequestException {
+        return ResponseEntity.ok(this.citaService.guardarCita(citaRq));
+    }
+
+    @Override
+    public ResponseEntity<List<Cita>> listarCitasPorPaciente(Integer pacienteIds) throws BadRequestException {
+        return ResponseEntity.ok(this.citaService.listarCitasporPaciente(pacienteIds));
     }
 }

@@ -1,108 +1,71 @@
 package com.uniminuto.clinica.entity;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Clase Entidad Medicamento.
+ */
+@Data
 @Entity
 @Table(name = "medicamento")
-public class Medicamento {
+public class Medicamento implements Serializable {
 
+    /**
+     * Id serializable.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Identificador único del medicamento.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id", nullable = false, unique = true)
+    private Integer id;
 
-    @Column(name = "nombre", nullable = false, unique = true, length = 100)
+    /**
+     * Nombre del medicamento.
+     */
+    @Column(name = "nombre", length = 100, nullable = false, unique = true)
     private String nombre;
 
-    @Column(name = "descripcion", columnDefinition = "TEXT")
+    /**
+     * Descripción del medicamento.
+     */
+    @Column(name = "descripcion", columnDefinition = "text")
     private String descripcion;
 
+    /**
+     * Presentación del medicamento.
+     */
     @Column(name = "presentacion", length = 100)
     private String presentacion;
 
+    /**
+     * Fecha de compra del medicamento.
+     */
     @Column(name = "fecha_compra", nullable = false)
     private LocalDate fechaCompra;
 
+    /*** Fecha de vencimiento del medicamento.
+     */
     @Column(name = "fecha_vence", nullable = false)
     private LocalDate fechaVence;
 
-    @Column(name = "fecha_creacion_registro", nullable = false, updatable = false)
-    @CreationTimestamp
+    /**
+     * Fecha de creación del registro.
+     */
+    @javax.persistence.Column(name = "fecha_creacion_registro", nullable = false)
     private LocalDateTime fechaCreacionRegistro;
 
-    @Column(name = "fecha_modificacion_registro")
-    @UpdateTimestamp
+    /**
+     * Fecha de modificación del registro.
+     */
+    @javax.persistence.Column(name = "fecha_modificacion_registro")
     private LocalDateTime fechaModificacionRegistro;
-
-    // Constructor vacío
-    public Medicamento() {}
-
-    // Getters y Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getPresentacion() {
-        return presentacion;
-    }
-
-    public void setPresentacion(String presentacion) {
-        this.presentacion = presentacion;
-    }
-
-    public LocalDate getFechaCompra() {
-        return fechaCompra;
-    }
-
-    public void setFechaCompra(LocalDate fechaCompra) {
-        this.fechaCompra = fechaCompra;
-    }
-
-    public LocalDate getFechaVence() {
-        return fechaVence;
-    }
-
-    public void setFechaVence(LocalDate fechaVence) {
-        this.fechaVence = fechaVence;
-    }
-
-    public LocalDateTime getFechaCreacionRegistro() {
-        return fechaCreacionRegistro;
-    }
-
-    public void setFechaCreacionRegistro(LocalDateTime fechaCreacionRegistro) {
-        this.fechaCreacionRegistro = fechaCreacionRegistro;
-    }
-
-    public LocalDateTime getFechaModificacionRegistro() {
-        return fechaModificacionRegistro;
-    }
-
-    public void setFechaModificacionRegistro(LocalDateTime fechaModificacionRegistro) {
-        this.fechaModificacionRegistro = fechaModificacionRegistro;
-    }
 }

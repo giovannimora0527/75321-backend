@@ -1,30 +1,25 @@
 package com.uniminuto.clinica.service;
 
 import com.uniminuto.clinica.entity.Medico;
+
 import java.util.List;
+
+import com.uniminuto.clinica.model.MedicoRq;
+import com.uniminuto.clinica.model.RespuestaRs;
 import org.apache.coyote.BadRequestException;
 
 /**
- * Servicio para la lógica de negocio de médicos.
  *
  * @author lmora
  */
 public interface MedicoService {
+    List<Medico> listarMedicos();
 
-    /**
-     * Lista todos los médicos registrados.
-     *
-     * @return lista de médicos
-     */
-    List<Medico> listarTodo();
-
-    /**
-     * Obtiene médicos por código de especialización.
-     *
-     * @param codigoEspec código de la especialización
-     * @return lista de médicos de la especialización
-     * @throws BadRequestException si el código es inválido
-     */
-    List<Medico> obtenerMedicosPorEspecializacion(String codigoEspec)
+    List<Medico> buscarPorEspecialidad(String codigo)
             throws BadRequestException;
+
+    RespuestaRs guardarMedico(MedicoRq medicoRq) throws BadRequestException;
+
+
+    RespuestaRs actualizarsMedico(MedicoRq medicoRq) throws BadRequestException;
 }

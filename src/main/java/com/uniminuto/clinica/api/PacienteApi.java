@@ -9,36 +9,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/**
- * API para gestión de pacientes.
- *
- * @author lmora
- */
 @CrossOrigin(origins = "*")
 @RequestMapping("/paciente")
 public interface PacienteApi {
 
     /**
-     * Lista todos los pacientes.
+     * Lista los usuarios de la bd.
      *
-     * @return lista de pacientes
+     * @return
      */
     @RequestMapping(value = "/listar",
             produces = {"application/json"},
+            consumes = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<List<Paciente>> listarPacientes();
 
-    /**
-     * Busca paciente por documento.
-     *
-     * @param numeroDocumento número de documento
-     * @return paciente encontrado
-     * @throws BadRequestException si documento inválido
-     */
-    @RequestMapping(value = "/buscar-por-documento",
+
+    @RequestMapping(value = "/buscar-paciente-documento",
             produces = {"application/json"},
+            consumes = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<Paciente> buscarPorDocumento(
-            @RequestParam String numeroDocumento
-    ) throws BadRequestException;
+    ResponseEntity<Paciente> buscarPacienteXIdentificacion(
+            @RequestParam String numeroDocumento)
+            throws BadRequestException;
+
+
+    /**
+     * Lista los usuarios de la bd.
+     *
+     * @return
+     */
+    @RequestMapping(value = "/listar-orden-fecha-nacimiento",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<List<Paciente>> listarPacientesXOrden(
+            @RequestParam String orden
+    );
 }

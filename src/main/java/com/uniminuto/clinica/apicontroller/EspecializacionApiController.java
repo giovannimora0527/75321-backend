@@ -4,35 +4,31 @@ import com.uniminuto.clinica.api.EspecializacionApi;
 import com.uniminuto.clinica.entity.Especializacion;
 import com.uniminuto.clinica.service.EspecializacionService;
 import java.util.List;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
+/**
+ *
+ * @author lmora
+ */
 @RestController
-    @RequestMapping("/especializacion")
-    @CrossOrigin("*")
-    public class EspecializacionApiController implements EspecializacionApi {
+public class EspecializacionApiController implements EspecializacionApi {
+    
+    @Autowired
+    private EspecializacionService servicio;
 
-        @Autowired
-        private EspecializacionService service;
-
-        @GetMapping("/listar")
-        public ResponseEntity<List<Especializacion>> listar() {
-            return ResponseEntity.ok(service.listarTodo());
-        }
-
-        @GetMapping("/buscar")
-        public ResponseEntity<Especializacion> buscarPorCodigo(@RequestParam String codigo) {
-            return ResponseEntity.ok(service.buscarPorCodigo(codigo));
-        }
-
-        @PostMapping("/crear")
-        public ResponseEntity<Especializacion> crear(@RequestBody Especializacion especializacion) {
-            return ResponseEntity.ok(service.crear(especializacion));
-        }
-
-        @PutMapping("/actualizar/{id}")
-        public ResponseEntity<Especializacion> actualizar(@PathVariable Long id, @RequestBody Especializacion especializacion) {
-            return ResponseEntity.ok(service.actualizar(id, especializacion));
-        }
+    @Override
+    public ResponseEntity<List<Especializacion>> listarEspecializaciones() {
+        return ResponseEntity.ok(this.servicio.listarTodo());
     }
+
+    @Override
+    public ResponseEntity<Especializacion> buscarPorCodigo(String codigo) 
+            throws BadRequestException {
+        return ResponseEntity.ok(this.servicio
+                .buscarEspecializacionPorCod(codigo));
+    }
+    
+}

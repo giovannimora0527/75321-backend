@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * API principal del sistema de clínica médica.
  *
  * @author lmora
  */
@@ -15,14 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/clinica")
 public interface ClinicaApi {
 
-    /**
-     * Servicio de prueba del sistema.
-     *
-     * @return estado del servicio
-     */
     @RequestMapping(value = "/test",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<RespuestaRs> testService();
+
 }

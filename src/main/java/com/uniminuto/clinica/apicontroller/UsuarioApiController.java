@@ -1,77 +1,60 @@
 package com.uniminuto.clinica.apicontroller;
 
+import com.uniminuto.clinica.api.UsuarioApi;
 import com.uniminuto.clinica.entity.Usuario;
+import com.uniminuto.clinica.model.RespuestaRs;
+import com.uniminuto.clinica.model.UsuarioRq;
 import com.uniminuto.clinica.service.UsuarioService;
 import java.util.List;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.MessagingException;
+
 /**
- * Controlador REST para gestión de usuarios.
  *
  * @author lmora
  */
 @RestController
-@RequestMapping("/users")
-@CrossOrigin(origins = "*")
-public class UsuarioApiController {
+public class UsuarioApiController implements UsuarioApi {
 
-    /**
-     * Servicio para operaciones de usuario.
-     */
     @Autowired
     private UsuarioService usuarioService;
 
-    /**
-     * Lista todos los usuarios del sistema.
-     *
-     * @return lista de usuarios
-     */
-    @GetMapping("/all")
+    @Override
     public ResponseEntity<List<Usuario>> listarUsuarios() {
-        return ResponseEntity.ok(usuarioService.listarTodosLosUsuarios());
+        return ResponseEntity.ok(this.usuarioService.listarTodosLosUsuarios());
     }
 
-    /**
-     * Busca usuario por nombre de usuario.
-     *
-     * @param username nombre de usuario
-     * @return usuario encontrado
-     * @throws BadRequestException si username inválido
-     */
-    @GetMapping("/find-username")
-    public ResponseEntity<Usuario> encontrarUsuarioPorNombre(@RequestParam String username)
+    @Override
+    public ResponseEntity<List<Usuario>> listarUsuariosPorRol(String rol) {
+        return ResponseEntity.ok(this.usuarioService.encontrarPorRol(rol));
+    }
+
+    @Override
+    public ResponseEntity<Usuario> buscarUsuarioPorNombre(String nombre)
             throws BadRequestException {
-        return ResponseEntity.ok(usuarioService.buscarUsuarioPorNombre(username));
+        return ResponseEntity.ok(this.usuarioService.encontrarPorNombre(nombre));
     }
 
-    /**
-     * Busca usuarios por rol.
-     *
-     * @param role rol del usuario
-     * @return lista de usuarios
-     */
-    @GetMapping("/find-by-role")
-    public ResponseEntity<List<Usuario>> encontrarUsuariosPorRol(@RequestParam String role) {
-        return ResponseEntity.ok(usuarioService.buscarPorRol(role));
-    }
-
-    /**
-     * Busca usuario por documento.
-     *
-     * @param numeroDocumento número de documento
-     * @return usuario encontrado
-     * @throws BadRequestException si documento inválido
-     */
-    @GetMapping("/find-by-document")
-    public ResponseEntity<Usuario> encontrarUsuarioPorDocumento(@RequestParam String numeroDocumento)
+    @Override
+    public ResponseEntity<List<Usuario>> buscarUsuariosPorEstado(Integer activo)
             throws BadRequestException {
-        return ResponseEntity.ok(usuarioService.buscarUsuarioPorDocumento(numeroDocumento));
+        return ResponseEntity.ok(this.usuarioService.buscarPorEstado(activo));
     }
+
+    @Override
+    public ResponseEntity<RespuestaRs> guardarUsuario(UsuarioRq usuarioNuevo)
+            throws BadRequestException, MessagingException {
+        return ResponseEntity.ok(this.usuarioService.guardarUsuario(usuarioNuevo));
+    }
+
+    @Override
+    public ResponseEntity<RespuestaRs> actualizarrUsuario(UsuarioRq usuario)
+            throws BadRequestException {
+        return ResponseEntity.ok(this.usuarioService.actualizarUsuario(usuario));
+    }
+
 }

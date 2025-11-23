@@ -2,18 +2,21 @@ package com.uniminuto.clinica.service.impl;
 
 import com.uniminuto.clinica.entity.Especializacion;
 import com.uniminuto.clinica.entity.Medico;
+import com.uniminuto.clinica.model.MedicoRq;
+import com.uniminuto.clinica.model.RespuestaRs;
 import com.uniminuto.clinica.repository.EspecializacionRepository;
 import com.uniminuto.clinica.repository.MedicoRepository;
+import com.uniminuto.clinica.service.EspecializacionService;
 import com.uniminuto.clinica.service.MedicoService;
+
 import java.util.List;
 import java.util.Optional;
+
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Implementación del servicio para la lógica de negocio de médicos.
- * Maneja operaciones de consulta y filtrado de médicos por especialización.
  *
  * @author lmora
  */
@@ -24,36 +27,68 @@ public class MedicoServiceImpl implements MedicoService {
     private MedicoRepository medicoRepository;
 
     @Autowired
+    private EspecializacionService especializacionService;
+
+
+    @Autowired
     private EspecializacionRepository especializacionRepository;
 
-    /**
-     * Lista todos los médicos registrados en el sistema.
-     * No aplica ningún filtro o criterio de ordenamiento.
-     *
-     * @return lista completa de médicos registrados, vacía si no hay médicos
-     */
     @Override
-    public List<Medico> listarTodo() {
+    public List<Medico> listarMedicos() {
         return this.medicoRepository.findAll();
     }
 
-    /**
-     * Obtiene médicos filtrados por código de especialización.
-     * Primero valida que la especialización exista antes de buscar médicos.
-     *
-     * @param codigoEspec código de la especialización a buscar, no puede ser inválido
-     * @return lista de médicos que tienen la especialización indicada, vacía si no hay coincidencias
-     * @throws BadRequestException si el código de especialización no existe en el sistema
-     */
     @Override
-    public List<Medico> obtenerMedicosPorEspecializacion(String codigoEspec)
+    public List<Medico> buscarPorEspecialidad(String codigo)
             throws BadRequestException {
-        Optional<Especializacion> optEsp = this.especializacionRepository
-                .findByCodigoEspecializacion(codigoEspec);
-        if (!optEsp.isPresent()) {
-            throw new BadRequestException("No existe la especializacion");
+        Especializacion e = this.especializacionService
+                .buscarEspecializacionPorCod(codigo);
+        return this.medicoRepository.findByEspecializacion(e);
+    }
+
+    @Override
+    public RespuestaRs guardarMedico(MedicoRq medicoRq) throws BadRequestException {
+        Optional<Medico> optmedico = this.medicoRepository.findByDocumento(
+                medicoRq.getDocumento()
+        );
+        if (optmedico.isPresent()) {
+            throw new BadRequestException("El número de documento ya está registrado");
         }
 
-        return this.medicoRepository.findByEspecializacion(optEsp.get());
+        optmedico = this.medicoRepository.findByRegistroProfesional(medicoRq.getRegistroProfesional());
+        if (optmedico.isPresent()) {
+            throw new BadRequestException("Existe otro medico con el registro profesional ingresado");
+        }
+
+        Optional<Especializacion> optEsp = this.especializacionRepository
+                .findById(medicoRq.getEspecializacion());
+        if (optEsp.isEmpty()) {
+            throw new BadRequestException("La especialización no existe");
+        }
+
+        Medico medicoGuardar = this.convertToRqToEntidad(medicoRq, optEsp.get());
+        this.medicoRepository.save(medicoGuardar);
+        RespuestaRs rta = new RespuestaRs();
+        rta.setMensaje("Médico guardado exitosamente");
+        rta.setStatus(200);
+        return rta;
     }
+
+    private Medico convertToRqToEntidad(MedicoRq medicoRq, Especializacion especialidad) {
+        Medico medico = new Medico();
+        medico.setNombres(medicoRq.getNombres());
+        medico.setApellidos(medicoRq.getApellidos());
+        medico.setDocumento(medicoRq.getDocumento());
+        medico.setTipoDocumento(medicoRq.getTipoDocumento());
+        medico.setRegistroProfesional(medicoRq.getRegistroProfesional());
+        medico.setEspecializacion(especialidad);
+        medico.setTelefono(medicoRq.getTelefono());
+        return medico;
+    }
+
+    @Override
+    public RespuestaRs actualizarsMedico(MedicoRq medicoRq) throws BadRequestException {
+        return null;
+    }
+
 }
