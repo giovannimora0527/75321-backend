@@ -40,11 +40,29 @@ public class Usuario implements Serializable {
 
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
-    
+
     @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "activo")
     private boolean activo;
-    
+
+    @Column(name = "intentos_fallidos")
+    private Integer intentosFallidos = 0;
+
+    @Column(name = "fecha_bloqueo")
+    private LocalDateTime fechaBloqueo;
+
+    @Column(name = "bloqueado")
+    private Boolean bloqueado = false;
+        
+    @Column(name = "password_temporal")
+    private String passwordTemporal;
+
+    @Column(name = "fecha_expiracion_temporal")
+    private LocalDateTime fechaExpiracionTemporal;
+
+    @Column(name = "requiere_cambio_password")
+    private Boolean requiereCambioPassword = false;
+
 }
