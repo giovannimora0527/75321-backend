@@ -25,4 +25,6 @@ public interface PacienteService {
 
 
     List<Paciente> listarOrdenadoPorFechaNacimiento(boolean ascendente);
+
+    void guardarPaciente(Paciente paciente);
 }

@@ -41,5 +41,9 @@ public class PacienteServiceImpl implements PacienteService {
             return this.pacienteRepository.findAllByOrderByFechaNacimientoDesc();
         }
     }
+    @Override
+    public void guardarPaciente(Paciente paciente) {
+        this.pacienteRepository.save(paciente);
+    }
 
 }
